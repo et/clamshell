@@ -1,12 +1,12 @@
 $:.unshift(File.dirname(__FILE__)) unless
   $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 
-require File.dirname(__FILE__) + '/spider/dsl'
-require File.dirname(__FILE__) + '/spider/dependency'
-require File.dirname(__FILE__) + '/spider/settings'
-require File.dirname(__FILE__) + '/spider/ui'
+require File.dirname(__FILE__) + '/clamshell/dsl'
+require File.dirname(__FILE__) + '/clamshell/dependency'
+require File.dirname(__FILE__) + '/clamshell/settings'
+require File.dirname(__FILE__) + '/clamshell/ui'
 
-module Spider
+module Clamshell
   class SafeExit < StandardError; end
   class DslError < StandardError; end
   class GitError < StandardError; end

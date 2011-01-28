@@ -1,4 +1,4 @@
-module Spider
+module Clamshell
   class Dsl
 
     def self.build(file)

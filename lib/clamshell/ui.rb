@@ -1,4 +1,4 @@
-module Spider
+module Clamshell
   class SilentUI
     def debug(text)   end
     def info(text)    end

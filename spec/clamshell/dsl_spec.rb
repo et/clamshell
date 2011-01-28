@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe Spider::Dsl do
+describe Clamshell::Dsl do
   PWD = File.dirname(__FILE__)
 
   describe "dsl functions" do
 
     before :each do
-      @dsl = Spider::Dsl.new
+      @dsl = Clamshell::Dsl.new
     end
 
     #describe "project" do
@@ -25,7 +25,7 @@ describe Spider::Dsl do
     #  G
 
     #  it "should create a Git dependency" do
-    #    @dsl.instance_eval(git).class.should == Spider::Git
+    #    @dsl.instance_eval(git).class.should == Clamshell::Git
     #  end
     #end
   end
@@ -33,7 +33,7 @@ describe Spider::Dsl do
   describe "builder" do
 
     it "should build the file" do
-      Spider::Dsl.build(PWD + '/data/Dependencies.list')
+      Clamshell::Dsl.build(PWD + '/data/Dependencies.list')
     end
 
   end

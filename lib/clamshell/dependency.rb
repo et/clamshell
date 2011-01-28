@@ -1,7 +1,7 @@
 require 'fileutils'
 require 'open3'
 
-module Spider
+module Clamshell
   class Dependency
     def name
       "No name given"
@@ -29,7 +29,7 @@ module Spider
     private
       def git(cmd)
         cmd = "git --git-dir=#{@uri} #{cmd}"
-        Spider.ui.info(cmd)
+        Clamshell.ui.info(cmd)
         out = `#{cmd}`
 
         if $?.exitstatus != 0

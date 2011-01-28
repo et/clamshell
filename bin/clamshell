@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+require File.dirname(__FILE__) + '/../lib/clamshell'
+require File.dirname(__FILE__) + '/../lib/clamshell/cli'
+
+begin
+  Clamshell::CLI.start
+rescue Clamshell::SafeExit => e
+  Clamshell.ui.warn e.message
+  exit 0
+rescue StandardError => e
+  Clamshell.ui.error e.message
+  Clamshell.ui.debug e.backtrace.join("\n")
+  exit 1
+rescue Interrupt => e
+  Clamshell.ui.error "\nQuitting..."
+  Clamshell.ui.debug e.backtrace.join("\n")
+  exit 1
+end
+
+# Finally start parsing the dependency file. A custom DSL
+# that needs to be well-formed.
+#begin
+#  eval(File.read(opts[:dependency_file])).display
+#rescue SyntaxError => se
+#  puts 'Dependencies file is not well-formed'.red
+#  exit(1)
+#end

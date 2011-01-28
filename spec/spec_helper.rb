@@ -1,5 +1,5 @@
 $:.unshift(File.dirname(__FILE__) + '/../lib')
-require 'spider'
+require 'clamshell'
 require 'rspec'
 
 ARGV.clear

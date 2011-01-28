@@ -3,7 +3,7 @@ require 'thor'
 
 # @todo - This test has too much duplication, clean this up.
 
-describe Spider::UI do
+describe Clamshell::UI do
 
   # @todo - These are all defined in Thor::Shell::Color.
   #         For some reason, I couldn't use them though, not sure why.
@@ -14,7 +14,7 @@ describe Spider::UI do
   BLUE   = "\e[34m"
 
   before :all do
-    @ui = Spider::UI.new(Thor::Shell::Color.new)
+    @ui = Clamshell::UI.new(Thor::Shell::Color.new)
     @text = "foobar"
   end
 
@@ -54,9 +54,9 @@ describe Spider::UI do
   end
 end
 
-describe Spider::SilentUI do
+describe Clamshell::SilentUI do
   before :all do
-    @ui = Spider::SilentUI.new
+    @ui = Clamshell::SilentUI.new
     @text = "foobar"
   end
 

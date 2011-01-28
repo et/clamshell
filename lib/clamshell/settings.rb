@@ -1,6 +1,6 @@
 require 'yaml'
 
-module Spider
+module Clamshell
   class Settings < Hash
     def initialize(config_file = nil)
       super

@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe Spider::Git do
+describe Clamshell::Git do
   before :all do
     PWD = File.dirname(__FILE__)
-    @git = Spider::Git.new(PWD + "/data/repo/.git", :ref => "4d16bcb15e413c65e49921837da5527a277e47ee")
-    @bad_git = Spider::Git.new(PWD + "/data/repo/.git", :ref => "123abc")
+    @git = Clamshell::Git.new(PWD + "/data/repo/.git", :ref => "4d16bcb15e413c65e49921837da5527a277e47ee")
+    @bad_git = Clamshell::Git.new(PWD + "/data/repo/.git", :ref => "123abc")
   end
 
   it "should return the repository's name" do

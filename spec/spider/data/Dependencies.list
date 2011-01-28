@@ -1,2 +1,3 @@
 Dependencies.configure do
+  git "/here/there/.git", :ref => "12345"
 end

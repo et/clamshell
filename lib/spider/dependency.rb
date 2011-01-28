@@ -3,6 +3,9 @@ require 'open3'
 
 module Spider
   class Dependency
+    def name
+      "No name given"
+    end
   end
 
   class Git < Dependency

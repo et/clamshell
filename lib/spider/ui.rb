@@ -8,7 +8,7 @@ module Spider
     def success(text) end
   end
 
-  class ColorUI < SilentUI
+  class UI < SilentUI
     attr_writer :shell
 
     def initialize(shell)
@@ -17,7 +17,7 @@ module Spider
     end
 
     def debug(text)
-      @shell.say(text)
+      @shell.say(text) if @debug
     end
 
     def info(text)

@@ -1,3 +1,2 @@
 Dependencies.configure do
-  project "MyProject"
 end

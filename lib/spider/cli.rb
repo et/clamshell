@@ -1,42 +1,34 @@
-require 'yaml'
 require 'thor'
 
 module Spider
   class CLI < Thor
 
-    class_option "verbose", :type => :boolean, :banner => "More verbose ouput"
-
-    class_option "config-file", :type => String,
-      :type => :string, :default => "config/dependencies.yml",
-      :banner => "Configuration file to override the default settings."
+    class_option "verbose",  :type => :boolean, :banner => "More verbose ouput"
+    class_option "no-color", :type => :boolean, :banner => "Disable color"
+    class_option "disable",  :type => :boolean, :banner => "Disable running spider"
 
     def initialize(*)
       super
 
       shell = (options["no-color"] ? Thor::Shell::Basic.new : Thor::Shell::Color.new)
-      Spider.ui = ColorUI.new(shell)
+      Spider.ui = UI.new(shell)
       Spider.ui.debug! if options["verbose"]
 
-
-      # Override the default settings if they exist
-      #config = Dependencies::Settings.to_hash
-      #config.merge!(YAML::load_file(opts[:config_file])['dependencies']) if File.exist?(opts[:config_file])
-      if Spider.settings[:skip_check]
-        Spider.ui.warning "Skipping dependency checks, you're on your own!"
-        exit(0)
+      if options["disable"]
+        raise SafeExit, "Skipping dependency checks, you're on your own!"
       end
     end
 
     desc "check FILE", "Validates a dependency file"
+    method_option "settings", :type => String, :type => :string,
+      :banner => "Configuration file to override the default settings."
     def check(file)
-      unless File.exist?(file)
-        Spider.ui.error "Dependency file: #{file}, does not exist"
-        exit 1
-      end
+      raise "File: #{file}, not found" unless File.exist?(file)
 
       Spider.ui.info "Checking dependency file: #{file} with the following settings:"
       Spider.ui.info Spider.settings.inspect
 
+      Spider.settings = (options["settings"] ? Settings.new(options["settings"]) : Settings.new)
     end
   end
 end

@@ -5,6 +5,9 @@ require File.dirname(__FILE__) + '/../lib/spider/cli'
 
 begin
   Spider::CLI.start
+rescue Spider::SafeExit => e
+  Spider.ui.warn e.message
+  exit 0
 rescue StandardError => e
   Spider.ui.error e.message
   Spider.ui.debug e.backtrace.join("\n")

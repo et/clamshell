@@ -25,10 +25,10 @@ module Spider
     def check(file)
       raise "File: #{file}, not found" unless File.exist?(file)
 
-      Spider.ui.info "Checking dependency file: #{file} with the following settings:"
-      Spider.ui.info Spider.settings.inspect
+      Spider.settings = Settings.new(options["settings"])
 
-      Spider.settings = (options["settings"] ? Settings.new(options["settings"]) : Settings.new)
+      Spider.ui.info "Checking dependency file: #{file} with the following settings:"
+      Spider.ui.info Spider.settings
     end
   end
 end

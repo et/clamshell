@@ -14,9 +14,7 @@ In your project root directory, set up a file called `Dependencies.list`:
     Dependencies.configure do
       project "YourProjectName"
 
-      dependency :type => "git",
-                 :ref  => "12345SHAID"
-                 :path => "/path/to/git/repo.git"
+      git "/path/to/git/repo.git", :ref => "12345SHAID"
     end
 
 

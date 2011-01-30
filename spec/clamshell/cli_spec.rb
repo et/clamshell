@@ -55,11 +55,11 @@ describe Clamshell::CLI do
       lambda { Clamshell::CLI.start(["check", "missing_file"])}.should raise_error(StandardError, /File: missing_file, not found/)
     end
 
-    #it "shows an info statements about to read a file" do
-    #  file = FIXTURES_DIR + '/Dependencies.list'
-    #  capture(:stdout) do
-    #    Clamshell::CLI.start(["check", file])
-    #  end.should =~ /Checking dependency file: #{file} with the following settings/
-    #end
+    it "shows an info statements about to read a file" do
+      file = FIXTURES_DIR + '/Dependencies.list'
+      capture(:stdout) do
+        Clamshell::CLI.start(["check", file])
+      end.should =~ /Checking dependency file: #{file} with the following settings/
+    end
   end
 end

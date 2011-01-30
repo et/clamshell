@@ -1,4 +1,4 @@
 require 'fileutils'
-require './lib/spider'
+require './lib/clamshell'
 
 Dir['tasks/**/*.rake'].each { |t| load t }

@@ -26,8 +26,8 @@ module Clamshell
       raise "File: #{file}, not found" unless File.exist?(file)
 
       if options["settings"]
-        file = options["settings"]
-        raise "Settings file: #{file}, not found." unless File.exist?(file)
+        settings_file = options["settings"]
+        raise "Settings file: #{settings_file}, not found." unless File.exist?(settings_file)
       end
       Clamshell.settings = Settings.new(options["settings"])
 

@@ -16,7 +16,7 @@ module Clamshell
                        "no_color"       => "Disable color in output"}
 
     def initialize(file = nil)
-      super DEFAULT_SETTINGS
+      super
       self.merge! DEFAULT_SETTINGS
 
       if file

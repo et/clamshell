@@ -8,9 +8,9 @@ module Clamshell
   autoload :UI,         'clamshell/ui'
   autoload :SilentUI,   'clamshell/ui'
 
-  autoload :Dependencies, 'clamshell/dsl/dependencies'
-  autoload :Git,          'clamshell/dsl/dependency'
-  autoload :Environment,  'clamshell/dsl/environment'
+  autoload :Project,     'clamshell/dsl/project'
+  autoload :Git,         'clamshell/dsl/dependency'
+  autoload :Environment, 'clamshell/dsl/environment'
 
   class SafeExit < StandardError; end
   class GitError < StandardError; end

@@ -1,4 +1,4 @@
-Dependencies.configure do
+Project.configure "MyProject" do
   git "/here/there/.git", :ref => "12345"
 
   environment("bash") do

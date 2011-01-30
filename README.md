@@ -11,9 +11,7 @@ project.
 
 In your project root directory, set up a file called `Dependencies.list`:
 
-    Dependencies.configure do
-      project "MyProject"
-
+    Project.configure "MyProject" do
       git "/path/to/git/repo.git", :ref => "12345SHAID"
     end
 
@@ -25,7 +23,7 @@ repository located at `/path/to/git/repo.git` whose `HEAD` must be pointing to `
 Sometimes your project has a dependency that is shell specific. You can set it
 up as follows:
 
-    Dependencies.configure do
+    Project("MyProject").configure do
       environment("bash") do
         env_var DISTCC_HOSTS "localhost red green blue"
 

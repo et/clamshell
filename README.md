@@ -72,11 +72,10 @@ are in green, otherwise they are listed in red.
 
 #### Boolean options
 
-* `--no-color`           - Disables color
-* `--disable`            - Disables clamshell from running (useful if you use clamshell in some kind of continuous integration)
-* `--verbose`            - Prints debugging information.
-* `--git_auto_pull`      - Performs a `git pull` on each of the git repositories before checking if the revision is correct.
-* `--git_auto_check_out` - Performs a `git checkout 12345SHAID` on each of the git repositories.
+* `--no-color`       - Disables color
+* `--disable`        - Disables clamshell from running (useful if you use clamshell in some kind of continuous integration)
+* `--verbose`        - Prints debugging information.
+* `--git_auto_reset` - Attempts `git reset 12345SHAID` on each of the git repositories before comparing revisions.
 
 #### String options
 
@@ -91,3 +90,8 @@ up a file called `settings.yml` and invoke `clamshell` as follows.
      % clamshell check Dependencies.list --settings=/path/to/settings.yml
 
 Any flags used on the command line will override what is in `settings.yml` file.
+
+
+## Todo
+
+* More git options -- git_auto_pull, reference more than SHA_ids (branch, tag, etc.)

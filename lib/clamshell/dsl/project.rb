@@ -23,5 +23,8 @@ module Clamshell
       e.instance_eval(&block)
       return e
     end
+
+    def to_s
+    end
   end
 end

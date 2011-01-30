@@ -13,7 +13,6 @@ module Clamshell
   autoload :Environment, 'clamshell/dsl/environment'
 
   class SafeExit < StandardError; end
-  class GitError < StandardError; end
   class DslError < StandardError; end
 
   class << self

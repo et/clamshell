@@ -4,7 +4,7 @@ module Clamshell
   class Settings < Hash
     def initialize(file = nil)
       super
-      self["git_auto_update"] = false
+      self["git_auto_reset"] = false
 
       if file
         settings = YAML::load_file(file)

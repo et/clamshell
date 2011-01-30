@@ -4,7 +4,7 @@ describe Clamshell::Settings do
 
   describe "default options" do
     it "should not git_auto_update" do
-      Clamshell::Settings.new()['git_auto_update'].should == false
+      Clamshell::Settings.new()['git_auto_reset'].should == false
     end
   end
 
@@ -19,7 +19,7 @@ describe Clamshell::Settings do
 
     it "should load a file, overriding default options, yet not setting new ones" do
       file = FIXTURES_DIR + '/settings.yml'
-      Clamshell::Settings.new(file).should == { 'git_auto_update' => true }
+      Clamshell::Settings.new(file).should == { 'git_auto_reset' => true }
     end
   end
 end

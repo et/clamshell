@@ -1,2 +1,2 @@
-git_auto_update: true
+git_auto_reset: true
 unknown_option: false

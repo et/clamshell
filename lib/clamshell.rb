@@ -8,6 +8,7 @@ module Clamshell
 
   autoload :Dsl,        'clamshell/dsl'
   autoload :Dependency, 'clamshell/dependency'
+  autoload :Git,        'clamshell/dependency'
   autoload :Settings,   'clamshell/settings'
   autoload :UI,         'clamshell/ui'
 

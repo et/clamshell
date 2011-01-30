@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Clamshell::Dsl do
-  PWD = File.dirname(__FILE__)
 
   describe "dsl functions" do
 
@@ -9,32 +8,40 @@ describe Clamshell::Dsl do
       @dsl = Clamshell::Dsl.new
     end
 
-    #describe "project" do
-    #  project = <<-P
-    #  project "MyProject"
-    #  P
+    describe "Dependencies" do
 
-    #  it "should print set the project's name" do
-    #    @dsl.instance_eval(project)
-    #  end
-    #end
+      before :each do
+        @dependencies = Clamshell::Dependencies.new
+      end
 
-    #describe "git" do
-    #  git = <<-G
-    #  git "/path/to/git/repo.git", :ref => "12345"
-    #  G
+      describe "project" do
+        project = <<-P
+        project "MyProject"
+        P
 
-    #  it "should create a Git dependency" do
-    #    @dsl.instance_eval(git).class.should == Clamshell::Git
-    #  end
-    #end
+        it "should print set the project's name" do
+          @dependencies.instance_eval(project)
+          @dependencies.name.should == "MyProject"
+        end
+      end
+
+      #describe "git" do
+      #  git = <<-G
+      #  git "/path/to/git/repo.git", :ref => "12345"
+      #  G
+
+      #  it "should create a Git dependency" do
+      #    @dependencies.instance_eval(git)
+      #    @dependencies.dependencies
+      #  end
+      #end
+    end
   end
 
   describe "builder" do
 
     it "should build the file" do
-      Clamshell::Dsl.build(PWD + '/data/Dependencies.list')
+      Clamshell::Dsl.build(FIXTURES_DIR + '/Dependencies.list')
     end
-
   end
 end

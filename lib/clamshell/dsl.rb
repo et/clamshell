@@ -10,6 +10,8 @@ module Clamshell
 
   class Dependencies
 
+    attr_reader :name
+
     def self.configure(&block)
       d = new
       d.instance_eval(&block)

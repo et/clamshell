@@ -51,7 +51,7 @@ describe Clamshell::CLI do
     end
 
     it "shows an info statements about to read a file" do
-      file = File.dirname(__FILE__) + "/data/Dependencies.list"
+      file = FIXTURES_DIR + '/Dependencies.list'
       capture(:stdout) do
         Clamshell::CLI.start(["check", file])
       end.should =~ /Checking dependency file: #{file} with the following settings/

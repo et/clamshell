@@ -3,6 +3,8 @@ require 'clamshell'
 require 'rspec'
 require 'stringio'
 
+FIXTURES_DIR = File.dirname(__FILE__) + '/fixtures'
+
 ARGV.clear
 
 RSpec.configure do |config|

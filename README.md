@@ -17,7 +17,7 @@ In your project root directory, set up a file called `Dependencies.list`:
       git "/path/to/git/repo.git", :ref => "12345SHAID"
     end
 
-In plain English, this says "The project, `MyProject` has one dependency to a git
+In plain English, this says: "The project, `MyProject` has one dependency to a git
 repository located at `/path/to/git/repo.git` whose `HEAD` must be pointing to `12345SHAID`"
 
 ###  Environment section

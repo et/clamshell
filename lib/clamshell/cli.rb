@@ -6,6 +6,7 @@ module Clamshell
     class_option "verbose",  :type => :boolean, :banner => "More verbose ouput"
     class_option "no-color", :type => :boolean, :banner => "Disable color"
     class_option "disable",  :type => :boolean, :banner => "Disable running clamshell"
+    class_option "settings", :type => :string,  :banner => "File with settings overrides"
 
     def initialize(*)
       super
@@ -17,6 +18,12 @@ module Clamshell
       if options["disable"]
         raise SafeExit, "Skipping dependency checks, you're on your own!"
       end
+
+      if options["settings"]
+        settings_file = options["settings"]
+        raise "Settings file: #{settings_file}, not found." unless File.exist?(settings_file)
+      end
+      Clamshell.settings = Settings.new(options["settings"])
     end
 
     desc "check FILE", "Validates a dependency file"
@@ -25,14 +32,10 @@ module Clamshell
     def check(file)
       raise "File: #{file}, not found" unless File.exist?(file)
 
-      if options["settings"]
-        settings_file = options["settings"]
-        raise "Settings file: #{settings_file}, not found." unless File.exist?(settings_file)
-      end
-      Clamshell.settings = Settings.new(options["settings"])
-
       Clamshell.ui.info "Checking dependency file: #{file} with the following settings:"
       Clamshell.ui.info Clamshell.settings
+
+      Dsl.build(file)
     end
   end
 end

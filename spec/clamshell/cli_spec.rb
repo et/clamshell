@@ -38,6 +38,12 @@ describe Clamshell::CLI do
         capture(:stdout){ Clamshell::CLI.start(["--disable"])}
       end.should raise_error(Clamshell::SafeExit, /Skipping dependency checks, you're on your own!/)
     end
+
+    it "#--settings, raises an error on a missing file" do
+      lambda do
+        capture(:stdout){ Clamshell::CLI.start(["--settings=missing_file"])}
+      end.should raise_error(StandardError, /Settings file: missing_file, not found/)
+    end
   end
 
   describe "#check" do
@@ -47,14 +53,13 @@ describe Clamshell::CLI do
 
     it "shows an error for a file not found" do
       lambda { Clamshell::CLI.start(["check", "missing_file"])}.should raise_error(StandardError, /File: missing_file, not found/)
-      #capture(:stdout){ Clamshell::CLI.start(["check", "missing_file"])}.should =~ /"check" was called incorrectly/
     end
 
-    it "shows an info statements about to read a file" do
-      file = FIXTURES_DIR + '/Dependencies.list'
-      capture(:stdout) do
-        Clamshell::CLI.start(["check", file])
-      end.should =~ /Checking dependency file: #{file} with the following settings/
-    end
+    #it "shows an info statements about to read a file" do
+    #  file = FIXTURES_DIR + '/Dependencies.list'
+    #  capture(:stdout) do
+    #    Clamshell::CLI.start(["check", file])
+    #  end.should =~ /Checking dependency file: #{file} with the following settings/
+    #end
   end
 end

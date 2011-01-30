@@ -2,15 +2,19 @@ $:.unshift(File.dirname(__FILE__)) unless
   $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 
 module Clamshell
-  class SafeExit < StandardError; end
-  class DslError < StandardError; end
-  class GitError < StandardError; end
 
   autoload :Dsl,        'clamshell/dsl'
-  autoload :Dependency, 'clamshell/dependency'
-  autoload :Git,        'clamshell/dependency'
   autoload :Settings,   'clamshell/settings'
   autoload :UI,         'clamshell/ui'
+  autoload :SilentUI,   'clamshell/ui'
+
+  autoload :Dependencies, 'clamshell/dsl/dependencies'
+  autoload :Git,          'clamshell/dsl/dependency'
+  autoload :Environment,  'clamshell/dsl/environment'
+
+  class SafeExit < StandardError; end
+  class GitError < StandardError; end
+  class DslError < StandardError; end
 
   class << self
     attr_writer :ui, :settings

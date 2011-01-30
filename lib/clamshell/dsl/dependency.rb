@@ -3,9 +3,7 @@ require 'open3'
 
 module Clamshell
   class Dependency
-    def name
-      "No name given"
-    end
+    attr_accessor :name
   end
 
   class Git < Dependency
@@ -19,7 +17,7 @@ module Clamshell
     end
 
     def name
-      File.basename(@uri, ".git")
+      File.dirname(@uri).split("/").last
     end
 
     def validate

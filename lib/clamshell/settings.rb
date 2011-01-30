@@ -2,15 +2,13 @@ require 'yaml'
 
 module Clamshell
   class Settings < Hash
-    def initialize(config_file = nil)
+    def initialize(file = nil)
       super
       self["git_auto_update"] = false
 
-      if config_file
-        raise "Config file: #{config_file}, not found." unless File.exist?(config_file)
-
-        settings = YAML::load_file(config_file)
-        raise "Your config file: #{config_file} is malformed." unless settings.class == Hash
+      if file
+        settings = YAML::load_file(file)
+        raise "Your settings file: #{file} is malformed." unless settings.class == Hash
 
         # Only merge over existing keys.
         # Don't create any new options

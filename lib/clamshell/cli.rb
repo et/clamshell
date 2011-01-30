@@ -25,6 +25,10 @@ module Clamshell
     def check(file)
       raise "File: #{file}, not found" unless File.exist?(file)
 
+      if options["settings"]
+        file = options["settings"]
+        raise "Settings file: #{file}, not found." unless File.exist?(file)
+      end
       Clamshell.settings = Settings.new(options["settings"])
 
       Clamshell.ui.info "Checking dependency file: #{file} with the following settings:"

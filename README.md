@@ -34,7 +34,7 @@ up as follows:
       end
     end
 
-This when run will print out the following:
+When run, this will print the following to standard out (or to a file using the `--shell-out=SHELL_OUT.txt` flag).
 
     export DISTCC_HOSTS='localhost red green blue'
     export PATH=~/bin:$PATH
@@ -81,6 +81,7 @@ are in green, otherwise they are listed in red.
 #### String options
 
 * `--shell=SHELLNAME` - The environment section will generate shell statements for `SHELLNAME`. This is required if a shell name is not specified in your environment section.
+* `--shell-out=SHELL_OUT.txt` - Pipe the generated shell statements to a file.
 
 #### Settings
 
@@ -88,3 +89,5 @@ All of the above options can be localized to a settings file. To do so, set
 up a file called `settings.yml` and invoke `clamshell` as follows.
 
      % clamshell check Dependencies.list --settings=/path/to/settings.yml
+
+Any flags used on the command line will override what is in `settings.yml` file.

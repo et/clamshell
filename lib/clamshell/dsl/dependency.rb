@@ -27,7 +27,7 @@ module Clamshell
     private
       def git(cmd)
         cmd = "git --git-dir=#{@uri} #{cmd}"
-        Clamshell.ui.info(cmd)
+        Clamshell.ui.debug(cmd)
         out = `#{cmd}`
 
         if $?.exitstatus != 0

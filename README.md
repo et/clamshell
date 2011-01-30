@@ -17,7 +17,7 @@ In your project root directory, set up a file called `Dependencies.list`:
       git "/path/to/git/repo.git", :ref => "12345SHAID"
     end
 
-In plain English this says "The project, 'MyProject' has one dependency to a git 
+In plain English, this says "The project, 'MyProject' has one dependency to a git
 repository located at /path/to/git/repo.git whose HEAD must be pointing to '12345SHAID'"
 
 ###  Environment section
@@ -56,6 +56,10 @@ Currently, the shells supported are tcsh and bash. However, I am assuming that
 csh and zsh are supported as well since they are closely related to tcsh and
 bash, respectively. Hence, aliases are set up for their respective shells.
 
+Refer to the spec fixtures for a full
+[example](https://github.com/et/clamshell/blob/master/spec/fixtures/Dependencies.list)
+of `Dependencies.list`.
+
 
 ## Usage
 
@@ -68,20 +72,20 @@ are in green, otherwise they are listed in red.
 
 ### Options
 
-    --no-color - Disables color (but how can you tell the difference
-                                 between good/bad dependencies???)
-    --disable  - Disables clamshell from running (useful if you use clamshell
-                                                  in some kind of continuous
-                                                  integration)
-    --verbose  - Prints debugging information.
+#### Boolean options
 
-### Configuration
+* `--no-color`           - Disables color
+* `--disable`            - Disables clamshell from running (useful if you use clamshell in some kind of continuous integration)
+* `--verbose`            - Prints debugging information.
+* `--git_auto_check_out` - Automatically checks out git repositories to their requested state.
 
-You may also customize `clamshell` to be more useful. To do so, set up a file
-called `settings.yml`.
+#### String options
 
-     git_auto_load: true   # Automatically checks out git repos to the requested state.
+* `--shell=SHELLNAME` - The environment section will generate shell statements for `SHELLNAME`. This is required if a shell name is not specified in your environment section.
 
-To use your configuration file, run `clamshell` as follows:
+#### Settings
+
+All of the above options can be localized to a settings file. To do so, set
+up a file called `settings.yml` and invoke `clamshell` as follows.
 
      % clamshell check Dependencies.list --settings=/path/to/settings.yml

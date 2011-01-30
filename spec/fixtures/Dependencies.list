@@ -1,7 +1,7 @@
 Dependencies.configure do
   git "/here/there/.git", :ref => "12345"
 
-  environment do
+  environment("bash") do
     env_var "PATH", "/usr/bin"
     env_var "PATH", :append  => "/usr/bin"
     env_var "PATH", :prepend => "/usr/bin"

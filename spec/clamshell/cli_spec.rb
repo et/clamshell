@@ -18,9 +18,9 @@ describe Clamshell::CLI do
         Clamshell.ui.instance_variable_get(:@shell).class.should == Thor::Shell::Color
       end
 
-      it "should give a basic shell for --no-color" do
+      it "should give a basic shell for --no_color" do
         capture(:stdout) do
-          Clamshell::CLI.start(["--no-color"])
+          Clamshell::CLI.start(["--no_color"])
         end
         Clamshell.ui.instance_variable_get(:@shell).class.should == Thor::Shell::Basic
       end

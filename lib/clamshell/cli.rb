@@ -3,15 +3,16 @@ require 'thor'
 module Clamshell
   class CLI < Thor
 
-    class_option "verbose",  :type => :boolean, :banner => "More verbose ouput"
-    class_option "no-color", :type => :boolean, :banner => "Disable color"
-    class_option "disable",  :type => :boolean, :banner => "Disable running clamshell"
+    Settings::DEFAULT_SETTINGS.each_key do |key|
+      class_option key, :type => :boolean, :banner => Settings::DEFAULT_BANNERS[key]
+    end
+
     class_option "settings", :type => :string,  :banner => "File with settings overrides"
 
     def initialize(*)
       super
 
-      shell = (options["no-color"] ? Thor::Shell::Basic.new : Thor::Shell::Color.new)
+      shell = (options["no_color"] ? Thor::Shell::Basic.new : Thor::Shell::Color.new)
       Clamshell.ui = UI.new(shell)
       Clamshell.ui.debug! if options["verbose"]
 

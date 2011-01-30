@@ -17,12 +17,3 @@ rescue Interrupt => e
   Clamshell.ui.debug e.backtrace.join("\n")
   exit 1
 end
-
-# Finally start parsing the dependency file. A custom DSL
-# that needs to be well-formed.
-#begin
-#  eval(File.read(opts[:dependency_file])).display
-#rescue SyntaxError => se
-#  puts 'Dependencies file is not well-formed'.red
-#  exit(1)
-#end

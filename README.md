@@ -25,10 +25,10 @@ up as follows:
 
     Project.configure ("MyProject") do
       environment("bash") do
-        env_var DISTCC_HOSTS "localhost red green blue"
+        env_var "DISTCC_HOSTS" "localhost red green blue"
 
-        env_var PATH, :prepend => "~/bin", :delimiter => ":"
-        env_var PATH, :append  => "~/usr/bin", :delimiter => ":"
+        env_var "PATH", :prepend => "~/bin", :delimiter => ":"
+        env_var "PATH", :append  => "~/usr/bin", :delimiter => ":"
 
         alias editor "vim"
       end

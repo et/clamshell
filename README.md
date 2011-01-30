@@ -18,7 +18,7 @@ In your project root directory, set up a file called `Dependencies.list`:
     end
 
 In plain English, this says "The project, 'MyProject' has one dependency to a git
-repository located at /path/to/git/repo.git whose HEAD must be pointing to '12345SHAID'"
+repository located at `/path/to/git/repo.git` whose HEAD must be pointing to `12345SHAID`"
 
 ###  Environment section
 
@@ -77,7 +77,8 @@ are in green, otherwise they are listed in red.
 * `--no-color`           - Disables color
 * `--disable`            - Disables clamshell from running (useful if you use clamshell in some kind of continuous integration)
 * `--verbose`            - Prints debugging information.
-* `--git_auto_check_out` - Automatically checks out git repositories to their requested state.
+* `--git_auto_pull`      - Performs a `git pull` on each of the git repositories before checking if the revision is correct.
+* `--git_auto_check_out` - Performs a `git checkout 12345SHAID` on each of the git repositories.
 
 #### String options
 

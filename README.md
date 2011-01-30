@@ -12,10 +12,49 @@ project.
 In your project root directory, set up a file called `Dependencies.list`:
 
     Dependencies.configure do
-      project "YourProjectName"
+      project "MyProject"
 
       git "/path/to/git/repo.git", :ref => "12345SHAID"
     end
+
+In plain English this says "The project, 'MyProject' has one dependency to a git 
+repository located at /path/to/git/repo.git whose HEAD must be pointing to '12345SHAID'"
+
+###  Environment section
+
+Sometimes your project has a dependency that is shell specific. You can set it
+up as follows:
+
+    Dependencies.configure do
+      environment("bash") do
+        env_var DISTCC_HOSTS "localhost red green blue"
+
+        env_var PATH, :prepend => "~/bin", :delimiter => ":"
+        env_var PATH, :append  => "~/usr/bin", :delimiter => ":"
+
+        alias editor "vim"
+      end
+    end
+
+This when run will print out the following:
+
+    export DISTCC_HOSTS='localhost red green blue'
+    export PATH=~/bin:$PATH
+    export PATH=$PATH:~/usr/bin
+    alias editor='vim'
+
+You also do not have specify a shell:
+
+    environment do
+      ...
+      ...
+    end
+
+But you must pass the flag `--shell=SHELLNAME`.
+
+Currently, the shells supported are tcsh and bash. However, I am assuming that
+csh and zsh are supported as well since they are closely related to tcsh and
+bash, respectively. Hence, aliases are set up for their respective shells.
 
 
 ## Usage

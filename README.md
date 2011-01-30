@@ -23,7 +23,7 @@ repository located at `/path/to/git/repo.git` whose `HEAD` must be pointing to `
 Sometimes your project has a dependency that is shell specific. You can set it
 up as follows:
 
-    Project("MyProject").configure do
+    Project.configure ("MyProject") do
       environment("bash") do
         env_var DISTCC_HOSTS "localhost red green blue"
 

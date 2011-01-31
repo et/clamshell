@@ -91,7 +91,8 @@ are in green, otherwise they are listed in red.
 * `--no-color`       - Disables color
 * `--disable`        - Disables clamshell from running (useful if you use clamshell in some kind of continuous integration)
 * `--verbose`        - Prints debugging information.
-* `--git_auto_reset` - Attempts `git reset 12345SHAID` on each of the git repositories before comparing revisions.
+* `--git_auto_reset` - Attempts to `git reset` each of the git repositories to the requested revision.
+* `--git_auto_pull`  - Attempts to `git pull` each of the git repositories' origins.
 
 #### String options
 
@@ -110,4 +111,4 @@ Any flags used on the command line will override what is in `settings.yml` file.
 
 ## Todo
 
-* More git options -- git_auto_pull, reference more than SHA_ids (branch, tag, etc.)
+* More git options -- reference more than SHA_ids (branch, tag, etc.)

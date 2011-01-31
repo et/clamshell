@@ -21,7 +21,7 @@ Clone the repository
 
 Install the required gems using `bundler`.
 
-    `bundle install`
+    bundle install
 
 ## Setting up a project dependency file
 

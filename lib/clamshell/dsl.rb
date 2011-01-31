@@ -12,6 +12,10 @@ module Clamshell
       else
         Clamshell.ui.info builder.inspect
       end
+    rescue SyntaxError => e
+      Clamshell.ui.error "Your dependencies file is malformed."
+      Clamshell.ui.debug e.message
+      Clamshell.ui.debug e.backtrace
     rescue GitError => e
       Clamshell.ui.error e.message
     end

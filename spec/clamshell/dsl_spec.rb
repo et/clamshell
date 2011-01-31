@@ -58,9 +58,9 @@ describe Clamshell::Dsl do
 
     describe "bad syntax" do
       it "should raise a syntax error" do
-        lambda do
+        capture(:stdout) do
           Clamshell::Dsl.build(FIXTURES_DIR + '/Dependencies.list.bad.syntax')
-        end.should raise_error(SyntaxError)
+        end.should =~ /Your dependencies file is malformed./
       end
     end
   end

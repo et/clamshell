@@ -21,7 +21,7 @@ module Clamshell
     def env_var(name, *args)
       case
       when args[0].class == String    # direct assignment
-        @stmts << @shell.env_var(name, args[0])
+        @stmts << @shell.env_var(name, quote(args[0]))
 
       else                            # appending or prepending to existing variable
         delimiter = args[0][:delimiter] || ""
@@ -32,17 +32,22 @@ module Clamshell
         else
           raise DslError, "Must specify prepend or append"
         end
-        @stmts << @shell.env_var(name, val)
+        @stmts << @shell.env_var(name, quote(val))
       end
     end
 
     def alias(name, val)
-      @stmts << @shell.alias(name, val)
+      @stmts << @shell.alias(name, quote(val) )
     end
 
     def to_s
       @stmts.join("\n")
     end
+
+    private
+      def quote(val)
+        %Q{"#{val}"}
+      end
   end
 
   class BashAdapter

@@ -7,7 +7,7 @@ describe Clamshell::Project do
 
   describe "project" do
     it "should set the project's name" do
-      @project.instance_variable_get("@name").should == "MyProject"
+      @project.instance_variable_get(:@name).should == "MyProject"
     end
   end
 
@@ -20,7 +20,8 @@ describe Clamshell::Project do
   describe "environment" do
     it "should return an environment" do
       block = proc {}
-      @project.environment("bash", &block).class.should == Clamshell::Environment
+      @project.environment("bash", &block)
+      @project.instance_variable_get(:@environment).class.should == Clamshell::Environment
     end
   end
 end

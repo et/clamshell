@@ -2,8 +2,10 @@ Project.configure "MyProject" do
   git "/here/there/.git", :ref => "12345"
 
   environment("bash") do
+    env_var "DISTCC_HOSTS", "localhost red green blue"
+
     env_var "PATH", "/usr/bin"
-    env_var "PATH", :append  => "/usr/bin"
-    env_var "PATH", :prepend => "/usr/bin"
+    env_var "PATH", :append  => "/usr/bin", :delimiter => ":"
+    env_var "PATH", :prepend => "/usr/bin", :delimiter => ":"
   end
 end

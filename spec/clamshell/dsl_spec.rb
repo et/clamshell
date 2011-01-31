@@ -10,9 +10,10 @@ describe Clamshell::Dsl do
   describe "builder" do
 
     out = <<-O.gsub /^\s+/, ''  # trim leading whitespace
-      export PATH=/usr/bin
-      export PATH=${PATH}/usr/bin
-      export PATH=/usr/bin${PATH}
+      export DISTCC_HOSTS="localhost red green blue"
+      export PATH="/usr/bin"
+      export PATH="${PATH}:/usr/bin"
+      export PATH="/usr/bin:${PATH}"
       O
 
     out.rstrip!   # Removes last newline from heredoc

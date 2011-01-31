@@ -22,3 +22,16 @@ RSpec.configure do |config|
   end
 end
 
+# @todo - Make this method more intuitive.
+def extract_repo(path, tar_name)
+  if !File.directory?(path)
+    cmd = "tar -xzvf #{FIXTURES_DIR}/#{tar_name} -C /tmp"
+    IO.popen(cmd) do |pipe|
+      pipe.read
+    end
+
+    if !File.directory?(path)
+      raise "Unable to extract #{tar_name} to #{path}"
+    end
+  end
+end

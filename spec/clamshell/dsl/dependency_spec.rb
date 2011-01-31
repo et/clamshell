@@ -121,16 +121,3 @@ describe Clamshell::Git do
     FileUtils.rm_rf(REMOTE_GIT_REPO_PATH)
   end
 end
-
-def extract_repo(path, tar_name)
-  if !File.directory?(path)
-    cmd = "tar -xzvf #{FIXTURES_DIR}/#{tar_name} -C /tmp"
-    IO.popen(cmd) do |pipe|
-      pipe.read
-    end
-
-    if !File.directory?(path)
-      raise "Unable to extract #{tar_name} to #{path}"
-    end
-  end
-end

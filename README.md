@@ -7,6 +7,22 @@ Inspired by the [bundler](http://gembundler.com), this tool attempts to do
 mitigate the dependency management that comes along with distributing a
 project.
 
+## Requirements
+
+* [ruby](http://www.ruby-lang.org/en/downloads/) 1.9.2
+* [bundler](http://gembundler.com/)
+* [git](http://git-scm.com/download) > 1.7.2
+
+## Installing
+
+Clone the repository
+
+    git clone git://github.com/et/clamshell.git
+
+Install the required gems using `bundler`.
+
+    `bundle install`
+
 ## Setting up a project dependency file
 
 In your project root directory, set up a file called `Dependencies.list`:

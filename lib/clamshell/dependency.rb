@@ -15,6 +15,7 @@ module Clamshell
       super
       @uri = uri
       @ref = opts[:ref]
+      @origin = opts[:origin]
     end
 
     def name
@@ -31,13 +32,18 @@ module Clamshell
     private
 
       def valid?
-        if @ref == git_head
-          return true
-        elsif (Clamshell.settings["git_auto_checkout"])
-          git "reset #{@ref}"
-          return @ref == git_head
+        return true if @ref == git_head
+
+        if (Clamshell.settings["git_auto_pull"])
+          if @origin
+            git "pull #{@origin} -q"
+          end
         end
-        return false
+
+        if (Clamshell.settings["git_auto_checkout"])
+          git "reset #{@ref}"
+        end
+        return @ref == git_head
       end
 
       def git_head
@@ -45,7 +51,8 @@ module Clamshell
       end
 
       def git(cmd)
-        cmd = "git --git-dir=#{@uri} #{cmd}"
+        work_tree = File.dirname(@uri)
+        cmd = "cd #{work_tree}; git #{cmd}"    #@todo - will this return back to cwd?
         sh(cmd)
       end
 
@@ -58,7 +65,7 @@ module Clamshell
         end
 
         unless err.empty? && status.exitstatus == 0
-          raise GitError, "An error occurred in git while running: #{cmd}:\n#{err}"
+          raise GitError, "An error occurred in git running: #{cmd}:\n#{err}"
         end
         out
       end

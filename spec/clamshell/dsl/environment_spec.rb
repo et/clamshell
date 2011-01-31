@@ -37,6 +37,12 @@ describe Clamshell::Environment do
         Clamshell::Environment.new.shell.should == Clamshell::BashAdapter
         Clamshell.settings[:shell] = nil
       end
+
+      it "should override the shell given as the initialize" do
+        Clamshell.settings[:shell] = "tcsh"
+        Clamshell::Environment.new("bash").shell.should == Clamshell::TcshAdapter
+        Clamshell.settings[:shell] = nil
+      end
     end
   end
 

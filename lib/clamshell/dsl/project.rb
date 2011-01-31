@@ -10,6 +10,7 @@ module Clamshell
     def initialize(name)
       @dependencies = []
       @name         = name
+      @environment  = nil
     end
 
     def git(uri, opts = {})
@@ -19,12 +20,13 @@ module Clamshell
     end
 
     def environment(shell, &block)
-      e = Environment.new(shell)
-      e.instance_eval(&block)
-      return e
+      @environment = Environment.new(shell)
+      @environment.instance_eval(&block)
     end
 
     def to_s
+      #@todo - Investigate the dependencies.
+      @environment.inspect
     end
   end
 end

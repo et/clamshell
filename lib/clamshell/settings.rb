@@ -17,8 +17,11 @@ module Clamshell
                             :git_auto_reset => "Attempts git reset each repository to their requested revisions.",
                             :git_auto_pull  => "Attempts to git pull each repository before comparing revisions."}
 
-    STRING_DEFAULT_OPTIONS = {:shell => nil}
-    STRING_DEFAULT_BANNERS = {:shell => "Specify a shell for the environment section"}
+    STRING_DEFAULT_OPTIONS = {:shell     => nil,
+                              :shell_out => nil}
+
+    STRING_DEFAULT_BANNERS = {:shell     => "Specify a shell for the environment section",
+                              :shell_out => "File to output the environment section"}
 
     def initialize(file = nil)
       super

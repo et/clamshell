@@ -3,7 +3,12 @@ module Clamshell
 
     attr_reader :shell
 
-    def initialize(shell)
+    def initialize(shell = nil)
+      unless shell
+        raise "No shell specified" unless Clamshell.settings[:shell]
+        shell =  Clamshell.settings[:shell]
+      end
+
       @shell = case shell
         when "csh", "tcsh" then TcshAdapter
         when "zsh", "bash" then BashAdapter

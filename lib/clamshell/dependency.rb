@@ -34,13 +34,13 @@ module Clamshell
       def valid?
         return true if @ref == git_head
 
-        if (Clamshell.settings["git_auto_pull"])
+        if (Clamshell.settings[:git_auto_pull])
           if @origin
             git "pull #{@origin} -q"
           end
         end
 
-        if (Clamshell.settings["git_auto_checkout"])
+        if (Clamshell.settings[:git_auto_checkout])
           git "reset #{@ref}"
         end
         return @ref == git_head

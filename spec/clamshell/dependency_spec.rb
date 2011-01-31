@@ -70,7 +70,7 @@ describe Clamshell::Git do
 
   describe "git_auto_checkout" do
     before :all do
-      Clamshell.settings["git_auto_checkout"] = true
+      Clamshell.settings[:git_auto_checkout] = true
     end
 
     it "should reset the repository to a valid ref" do
@@ -86,13 +86,13 @@ describe Clamshell::Git do
     end
 
     after :all do
-      Clamshell.settings["git_auto_checkout"] = false
+      Clamshell.settings[:git_auto_checkout] = false
     end
   end
 
   describe "git_auto_pull" do
     before :all do
-      Clamshell.settings["git_auto_pull"] = true
+      Clamshell.settings[:git_auto_pull] = true
     end
 
     it "should raise an error trying to pull from an unknown git repo" do
@@ -112,7 +112,7 @@ describe Clamshell::Git do
     end
 
     after :all do
-      Clamshell.settings["git_auto_pull"] = false
+      Clamshell.settings[:git_auto_pull] = false
     end
   end
 

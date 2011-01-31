@@ -3,8 +3,12 @@ require 'thor'
 module Clamshell
   class CLI < Thor
 
-    Settings::DEFAULT_SETTINGS.each_key do |key|
-      class_option key, :type => :boolean, :banner => Settings::DEFAULT_BANNERS[key]
+    Settings::BOOL_DEFAULT_OPTIONS.each_key do |key|
+      class_option key, :type => :boolean, :banner => Settings::BOOL_DEFAULT_BANNERS[key]
+    end
+
+    Settings::STRING_DEFAULT_OPTIONS.each_key do |key|
+      class_option key, :type => :string, :banner => Settings::STRING_DEFAULT_BANNERS[key]
     end
 
     class_option "settings", :type => :string,  :banner => "File with settings overrides"

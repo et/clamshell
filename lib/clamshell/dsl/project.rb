@@ -14,9 +14,7 @@ module Clamshell
     end
 
     def git(uri, opts = {})
-      g = Git.new(uri, opts)
-      @dependencies << g
-      return g
+      @dependencies << Git.new(uri, opts)
     end
 
     def environment(shell, &block)

@@ -65,6 +65,11 @@ You also do not have specify a shell:
     end
 
 But you must pass the flag `--shell=SHELLNAME`.
+Best practices for multi-shell environments can use the following command:
+
+    --shell=`ps -p $$ | awk 'NR==2 {print $4}'`
+
+which will set the shell flag to the type of shell currently being ran.
 
 Currently, the shells supported are tcsh and bash. However, I am assuming that
 csh and zsh are supported as well since they are closely related to tcsh and

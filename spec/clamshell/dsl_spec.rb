@@ -31,7 +31,17 @@ describe Clamshell::Dsl do
         File.should_receive(:open).with("temp_file", "w").and_yield(file)
         file.should_receive(:write).with(out)
         Clamshell::Dsl.build(FIXTURES_DIR + '/Dependencies.list')
+      end
 
+      it "should raise an error when it can't write" do
+        Clamshell.settings[:shell_out] = "/root/temp_file"
+        lambda do
+          Clamshell::Dsl.build(FIXTURES_DIR + '/Dependencies.list')
+        end.should raise_error(StandardError, /Permission denied/)
+
+      end
+
+      after :each do
         Clamshell.settings[:shell_out] = nil
       end
     end

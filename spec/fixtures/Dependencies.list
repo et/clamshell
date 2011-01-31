@@ -1,5 +1,5 @@
 Project.configure "MyProject" do
-  git "/here/there/.git", :ref => "12345"
+  git "/tmp/git_repo/.git", :ref => "182ed49c5fb4c42a63a18009ef2dbb87adb7044f"
 
   environment("bash") do
     env_var "DISTCC_HOSTS", "localhost red green blue"

@@ -4,6 +4,8 @@ require 'rspec'
 require 'stringio'
 
 FIXTURES_DIR = File.dirname(__FILE__) + '/fixtures'
+GIT_REPO_PATH        = File.join('/tmp', 'git_repo')
+REMOTE_GIT_REPO_PATH = File.join('/tmp', 'remote_git_repo')
 
 ARGV.clear
 

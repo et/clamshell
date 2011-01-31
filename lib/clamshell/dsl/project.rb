@@ -22,8 +22,11 @@ module Clamshell
       @environment.instance_eval(&block)
     end
 
+    def dependencies_valid?
+      @dependencies.all? { |d| d.valid? }
+    end
+
     def to_s
-      #@todo - Investigate the dependencies.
       @environment.inspect
     end
   end

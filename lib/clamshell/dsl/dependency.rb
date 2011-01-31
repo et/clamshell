@@ -22,29 +22,20 @@ module Clamshell
       File.dirname(@uri).split("/").last
     end
 
-    def to_s
-      unless valid?
-        raise GitError, "Git repository: #{name} (#{@uri}), is not at the correct revision.\n" <<
-                        "Requested: #{@ref}\nFound: #{git_head}"
+    def valid?
+      return true if @ref == git_head
+
+      if (Clamshell.settings[:git_auto_pull])
+        git "pull #{@origin} -q" if @origin
       end
+
+      if (Clamshell.settings[:git_auto_checkout])
+        git "reset #{@ref}"
+      end
+      return @ref == git_head
     end
 
     private
-
-      def valid?
-        return true if @ref == git_head
-
-        if (Clamshell.settings[:git_auto_pull])
-          if @origin
-            git "pull #{@origin} -q"
-          end
-        end
-
-        if (Clamshell.settings[:git_auto_checkout])
-          git "reset #{@ref}"
-        end
-        return @ref == git_head
-      end
 
       def git_head
         git "rev-parse HEAD"

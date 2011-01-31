@@ -1,7 +1,7 @@
 module Clamshell
   class Dsl
     def self.build(file)
-      builder = instance_eval(IO.read(file))
+      builder = instance_eval(IO.read(file)) # builder should be a Project object.
       if Clamshell.settings[:shell_out]
         File.open(Clamshell.settings[:shell_out], "w") do |file|
           file.write(builder.inspect)

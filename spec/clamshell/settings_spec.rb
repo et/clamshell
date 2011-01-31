@@ -11,7 +11,7 @@ describe Clamshell::Settings do
   describe "loading config file" do
 
     it "shows an error on a malformed settings file" do
-      file = FIXTURES_DIR + '/bad_settings.yml'
+      file = FIXTURES_DIR + '/settings.yml.bad.syntax'
       lambda do
         Clamshell::Settings.new(file)
       end.should raise_error(RuntimeError, /Your settings file: #{file} is malformed./)

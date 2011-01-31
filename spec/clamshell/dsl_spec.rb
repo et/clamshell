@@ -46,6 +46,14 @@ describe Clamshell::Dsl do
         Clamshell.settings[:shell_out] = nil
       end
     end
+
+    describe "bad syntax" do
+      it "should raise a syntax error" do
+        lambda do
+          Clamshell::Dsl.build(FIXTURES_DIR + '/Dependencies.list.bad.syntax')
+        end.should raise_error(SyntaxError)
+      end
+    end
   end
 
   after :all do

@@ -22,8 +22,8 @@ module Clamshell
       @environment.instance_eval(&block)
     end
 
-    def dependencies_valid?
-      @dependencies.all? { |d| d.valid? }
+    def validate_dependencies
+      @dependencies.each { |d| d.validate }
     end
 
     def to_s

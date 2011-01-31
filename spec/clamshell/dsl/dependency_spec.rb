@@ -50,6 +50,17 @@ describe Clamshell::Git do
     end
   end
 
+  describe "validate" do
+    it "should raise an error" do
+      lambda { @bad_git.validate}.should raise_error(Clamshell::GitError,
+                                                     /Git repository: git_repo\s.*?\sis not at the correct revision.\nRequested: \w+\nFound: \w+/)
+    end
+
+    it "should not raise an error" do
+      lambda { @good_git.validate}.should_not raise_error(Clamshell::GitError)
+    end
+  end
+
   describe "git_auto_checkout" do
     before :all do
       Clamshell.settings[:git_auto_checkout] = true
@@ -58,12 +69,12 @@ describe Clamshell::Git do
     it "should reset the repository to a valid ref" do
       @old_git = Clamshell::Git.new(GIT_REPO_PATH + '/.git',
                                     :ref => '81586f244689250938e20aea135e8f699300feb9')
-      @old_git.valid?.should == true
+      @old_git.send(:valid?).should == true
     end
 
     it "should raise error when resetting the repository to an invalid ref" do
       lambda do
-        @bad_git.valid?
+        @bad_git.send(:valid?)
       end.should raise_error(Clamshell::GitError, /An error occurred in git running:/)
     end
 
@@ -82,7 +93,7 @@ describe Clamshell::Git do
         git = Clamshell::Git.new(GIT_REPO_PATH + '/.git',
                                :ref => 'e00109040c4b4210ac5c7a2472ec6171a7b60093',
                                :origin => '/invalid_path/' + '/.git')
-        git.valid?
+        git.send(:valid?)
       end.should raise_error(Clamshell::GitError, /An error occurred in git running:/)
     end
 
@@ -90,7 +101,7 @@ describe Clamshell::Git do
       git = Clamshell::Git.new(GIT_REPO_PATH + '/.git',
                                :ref => 'e00109040c4b4210ac5c7a2472ec6171a7b60093',
                                :origin => REMOTE_GIT_REPO_PATH + '/.git')
-      git.valid?.should == true
+      git.send(:valid?).should == true
     end
 
     after :all do

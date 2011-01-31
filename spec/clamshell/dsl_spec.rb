@@ -52,7 +52,7 @@ describe Clamshell::Dsl do
       it "should print to standard out" do
         capture(:stdout) do
           Clamshell::Dsl.build(FIXTURES_DIR + '/Dependencies.list.bad.ref')
-        end.should == "One of your dependencies is not valid\n#{out}\n"
+        end.should =~ /Git repository: git_repo\s.*?\sis not at the correct revision/
       end
     end
 

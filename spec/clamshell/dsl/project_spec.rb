@@ -16,7 +16,7 @@ describe Clamshell::Project do
       @project.git("/path/to/git/repo.git", :ref => "12345")
       @project.instance_variable_get(:@dependencies).one? do |d|
         d.class == Clamshell::Git
-      end.should == true
+      end.should be_true
     end
   end
 

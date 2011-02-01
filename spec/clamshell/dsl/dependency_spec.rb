@@ -42,11 +42,11 @@ describe Clamshell::Git do
 
   describe "valid" do
     it "should not be valid" do
-      @bad_git.send(:valid?).should == false
+      @bad_git.send(:valid?).should be_false
     end
 
     it "should be valid" do
-      @good_git.send(:valid?).should == true
+      @good_git.send(:valid?).should be_true
     end
   end
 
@@ -69,7 +69,7 @@ describe Clamshell::Git do
     it "should reset the repository to a valid ref" do
       @old_git = Clamshell::Git.new(GIT_REPO_PATH + '/.git',
                                     :ref => '81586f244689250938e20aea135e8f699300feb9')
-      @old_git.send(:valid?).should == true
+      @old_git.send(:valid?).should be_true
     end
 
     it "should raise error when resetting the repository to an invalid ref" do
@@ -101,7 +101,7 @@ describe Clamshell::Git do
       git = Clamshell::Git.new(GIT_REPO_PATH + '/.git',
                                :ref => 'e00109040c4b4210ac5c7a2472ec6171a7b60093',
                                :origin => REMOTE_GIT_REPO_PATH + '/.git')
-      git.send(:valid?).should == true
+      git.send(:valid?).should be_true
     end
 
     after :all do

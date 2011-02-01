@@ -30,7 +30,7 @@ describe Clamshell::CLI do
       capture(:stdout) do
         Clamshell::CLI.start(["--verbose"])
       end
-      Clamshell.ui.instance_variable_get(:@debug).should == true
+      Clamshell.ui.instance_variable_get(:@debug).should be_true
     end
 
     it "#--disable, raises a safe system exit error" do

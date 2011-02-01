@@ -55,15 +55,16 @@ describe Clamshell::CLI do
       lambda { Clamshell::CLI.start(["check", "missing_file"])}.should raise_error(StandardError, /File: missing_file, not found/)
     end
 
-    #it "shows an info statements about to read a file" do
-    #  extract_repo(GIT_REPO_PATH,        'git_repo.tar.gz')
+    # Todo - Make this test a little better.
+    it "shows an info statements about to read a file" do
+      extract_repo(GIT_REPO_PATH,        'git_repo.tar.gz')
 
-    #  file = FIXTURES_DIR + '/Dependencies.list'
-    #  capture(:stdout) do
-    #    Clamshell::CLI.start(["check", file])
-    #  end.should =~ /Checking dependency file: #{file} with the following settings/
+      file = FIXTURES_DIR + '/Dependencies.list'
+      capture(:stdout) do
+        Clamshell::CLI.start(["check", file])
+      end.should =~ /export DISTCC/
 
-    #  FileUtils.rm_rf(GIT_REPO_PATH)
-    #end
+      FileUtils.rm_rf(GIT_REPO_PATH)
+    end
   end
 end

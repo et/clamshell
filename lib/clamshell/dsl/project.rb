@@ -27,7 +27,7 @@ module Clamshell
     end
 
     def to_s
-      @environment.inspect
+      @environment.inspect if @environment
     end
   end
 end

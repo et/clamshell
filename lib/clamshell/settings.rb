@@ -29,7 +29,7 @@ module Clamshell
       self.merge! STRING_DEFAULT_OPTIONS
 
       if file
-        settings = YAML::load_file(file)
+        settings = YAML::load_file(file)['clamshell']
         raise "Your settings file: #{file} is malformed." unless settings.class == Hash
 
         # Converts YAML keys from string to symbols

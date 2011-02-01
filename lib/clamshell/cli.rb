@@ -11,7 +11,7 @@ module Clamshell
       class_option key, :type => :string, :banner => Settings::STRING_DEFAULT_BANNERS[key]
     end
 
-    class_option "settings", :type => :string,  :banner => "File with settings overrides"
+    class_option :settings, :type => :string,  :banner => "File with settings overrides"
 
     def initialize(*)
       super
@@ -32,8 +32,6 @@ module Clamshell
     end
 
     desc "check FILE", "Validates a dependency file"
-    method_option "settings", :type => String, :type => :string,
-      :banner => "Configuration file to override the default settings."
     def check(file)
       raise "File: #{file}, not found" unless File.exist?(file)
 

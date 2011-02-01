@@ -2,10 +2,17 @@ A work in progress, adding a [README](http://tom.preston-werner.com/2010/08/23/r
 
 # Clamshell
 
-Clamshell is a tool that manages project depenencies in a generic application.
-Inspired by the [bundler](http://gembundler.com), this tool attempts to do
-mitigate the dependency management that comes along with distributing a
-project.
+Inspired by [bundler](http://gembundler.com), clamshell is a tool that manages
+project dependencies. However, there are some differences:
+
+* Bundler works for only ruby projects, clamshell works for all projects
+  reguardless of the language.
+* Bundler checks to see if the correct depedencies (gems) are installed. If
+  not, then it installs it for the user. Clamshell only does the former.
+
+Additionally, clamshell has functionality to prepare environment settings (such
+as setting aliases, environment variables, etc.) that works reguardless of the
+user's running shell (bash, tcsh).
 
 ## Requirements
 
@@ -65,7 +72,7 @@ You also do not have specify a shell:
     end
 
 But you must pass the flag `--shell=SHELLNAME`.
-Best practices for multi-shell environments can use the following command:
+Best practices for multi-shell environments use the following command:
 
     --shell=`ps -p $$ | awk 'NR==2 {print $4}'`
 
@@ -76,7 +83,7 @@ csh and zsh are supported as well since they are closely related to tcsh and
 bash, respectively. Hence, aliases are set up for their respective shells.
 
 Refer to the spec fixtures for a full
-[example](https://github.com/et/clamshell/blob/master/spec/fixtures/Dependencies.list)
+[example](http://github.com/et/clamshell/blob/master/spec/fixtures/Dependencies.list)
 of `Dependencies.list`.
 
 
@@ -86,8 +93,7 @@ Run `clamshell` over your `Dependencies.list` file you just created.
 
     % clamshell check Dependencies.list
 
-It should print out the list of dependencies. Dependencies up to date
-are in green, otherwise they are listed in red.
+It any dependencies are out of date, they will be listed in red.
 
 ### Options
 
@@ -112,6 +118,9 @@ up a file called `settings.yml` and invoke `clamshell` as follows.
      % clamshell check Dependencies.list --settings=/path/to/settings.yml
 
 Any flags used on the command line will override what is in `settings.yml` file.
+Refer to the spec fixtures for a full
+[example](http://github.com/et/clamshell/blob/master/spec/fixtures/settings.yml)
+of `settings.yml`.
 
 
 ## Todo
@@ -119,3 +128,5 @@ Any flags used on the command line will override what is in `settings.yml` file.
 * More git options -- reference more than SHA_ids (branch, tag, etc.)
 * Setting an environment variable should set some kind of internal environment variable as well.
 * If the output it to be sourced then use echo statements
+* Check if apps exist in user's PATH.
+* Throw error status code if a dependency is not fulfilled.

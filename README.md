@@ -118,3 +118,4 @@ Any flags used on the command line will override what is in `settings.yml` file.
 
 * More git options -- reference more than SHA_ids (branch, tag, etc.)
 * Setting an environment variable should set some kind of internal environment variable as well.
+* If the output it to be sourced then use echo statements

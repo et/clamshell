@@ -50,8 +50,8 @@ up as follows:
       environment("bash") do
         env_var "DISTCC_HOSTS" "localhost red green blue"
 
-        env_var "PATH", :prepend => "~/bin", :delimiter => ":"
-        env_var "PATH", :append  => "~/usr/bin", :delimiter => ":"
+        env_var "PATH", :prepend => "~/bin",    :delimiter => ":"
+        env_var "PATH", :append  => "/usr/bin", :delimiter => ":"
 
         alias editor "vim"
       end
@@ -61,7 +61,7 @@ When run, this will print the following to standard out (or to a file using the 
 
     export DISTCC_HOSTS='localhost red green blue'
     export PATH=~/bin:$PATH
-    export PATH=$PATH:~/usr/bin
+    export PATH=$PATH:/usr/bin
     alias editor='vim'
 
 You also do not have specify a shell:
@@ -89,7 +89,7 @@ of `Dependencies.list`.
 
 ## Usage
 
-Run `clamshell` over your `Dependencies.list` file you just created.
+Run `clamshell` over your `Dependencies.list` file you've just created.
 
     % clamshell check Dependencies.list
 
@@ -108,7 +108,7 @@ It any dependencies are out of date, they will be listed in red.
 #### String options
 
 * `--shell=SHELLNAME` - The environment section will generate shell statements for `SHELLNAME`. This is required if a shell name is not specified in your environment section.
-* `--shell-out=SHELL_OUT.txt` - Pipe the generated shell statements to a file.
+* `--shell_out=SHELL_OUT.txt` - Pipe the generated shell statements to a file.
 
 #### Settings
 

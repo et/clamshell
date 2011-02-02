@@ -6,7 +6,6 @@ module Clamshell
   class Dependency
   end
 
-  class GitError < StandardError; end
 
   class Git < Dependency
     attr_accessor :uri, :ref

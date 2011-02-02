@@ -3,6 +3,8 @@ module Clamshell
     def self.build(file)
       builder = instance_eval(IO.read(file)) # builder should be a Project object.
 
+      return unless builder  # In the case that there is an empty depdendencies file.
+
       builder.validate_dependencies
 
       if Clamshell.settings[:shell_out]

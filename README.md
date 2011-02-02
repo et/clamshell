@@ -57,7 +57,7 @@ up as follows:
       end
     end
 
-When run, this will print the following to standard out (or to a file using the `--shell-out=SHELL_OUT.txt` flag).
+When run, this will print the following to standard out.
 
     export DISTCC_HOSTS='localhost red green blue'
     export PATH=~/bin:$PATH
@@ -102,8 +102,8 @@ It any dependencies are out of date, they will be listed in red.
 * `--no-color`       - Disables color
 * `--disable`        - Disables clamshell from running (useful if you use clamshell in some kind of continuous integration)
 * `--verbose`        - Prints debugging information.
-* `--git_auto_reset` - Attempts to `git reset` each of the git repositories to the requested revision.
-* `--git_auto_pull`  - Attempts to `git pull` each of the git repositories' origins.
+* `--git_auto_reset` - Attempts to `git reset` each of the git repositories to the requested revision. (FIXME)
+* `--git_auto_pull`  - Attempts to `git pull` each of the git repositories' origins. (FIXME)
 
 #### String options
 
@@ -130,3 +130,4 @@ of `settings.yml`.
 * If the output it to be sourced then use echo statements
 * Check if apps exist in user's PATH.
 * Throw error status code if a dependency is not fulfilled.
+* shell_out flag implementation.

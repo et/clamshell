@@ -12,9 +12,12 @@ module Clamshell
 
     def initialize(uri, opts)
       super
-      @uri = uri
-      @ref = opts[:ref]
-      @origin = opts[:origin]
+      @uri    = validate_dir(uri)
+      @ref    = opts[:ref]
+
+      if opts[:remote]
+        @remote = validate_dir(opts[:remote])
+      end
     end
 
     def name
@@ -33,13 +36,20 @@ module Clamshell
         return true if @ref == git_head
 
         if (Clamshell.settings[:git_auto_pull])
-          git "pull #{@origin} -q" if @origin
+          git "pull #{@remote} -q" if @remote
         end
 
         if (Clamshell.settings[:git_auto_checkout])
           git "reset #{@ref}"
         end
-        return @ref == git_head
+        @ref == git_head
+      end
+
+      def validate_dir(dir)
+        unless File.directory?(dir)
+          raise GitError, "Git repository: #{dir} not found."
+        end
+        dir
       end
 
       def git_head
@@ -47,9 +57,7 @@ module Clamshell
       end
 
       def git(cmd)
-        work_tree = File.dirname(@uri)
-        cmd = "cd #{work_tree}; git #{cmd}"    #@todo - will this return back to cwd?
-        sh(cmd)
+        Dir.chdir(@uri) { sh "git #{cmd}" }
       end
 
       def sh(cmd)

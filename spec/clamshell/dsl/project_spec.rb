@@ -13,10 +13,14 @@ describe Clamshell::Project do
 
   describe "git" do
     it "should create a Git dependency" do
-      @project.git("/path/to/git/repo.git", :ref => "12345")
+      create_repo("/tmp/repo")
+
+      @project.git("/tmp/repo/.git", :ref => "12345")
       @project.instance_variable_get(:@dependencies).one? do |d|
         d.class == Clamshell::Git
       end.should be_true
+
+      FileUtils.rm_rf("/tmp/repo")
     end
   end
 

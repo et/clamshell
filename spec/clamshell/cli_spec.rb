@@ -28,23 +28,25 @@ describe Clamshell::CLI do
       end
     end
 
-    it "#--verbose, should turn on debug statements" do
-      capture(:stdout) do
-        Clamshell::CLI.start(["--verbose"])
+    describe "options" do
+      it "#--verbose, should turn on debug statements" do
+        capture(:stdout) do
+          Clamshell::CLI.start(["--verbose"])
+        end
+        Clamshell.ui.instance_variable_get(:@debug).should be_true
       end
-      Clamshell.ui.instance_variable_get(:@debug).should be_true
-    end
 
-    it "#--disable, raises a safe system exit error" do
-      lambda do
-        capture(:stdout){ Clamshell::CLI.start(["--disable"])}
-      end.should raise_error(Clamshell::SafeExit, /Skipping dependency checks, you're on your own!/)
-    end
+      it "#--disable, raises a safe system exit error" do
+        lambda do
+          capture(:stdout){ Clamshell::CLI.start(["--disable"])}
+        end.should raise_error(Clamshell::SafeExit, /Skipping dependency checks, you're on your own!/)
+      end
 
-    it "#--settings, raises an error on a missing file" do
-      lambda do
-        capture(:stdout){ Clamshell::CLI.start(["--settings=missing_file"])}
-      end.should raise_error(StandardError, /Settings file: missing_file, not found/)
+      it "#--settings, raises an error on a missing file" do
+        lambda do
+          capture(:stdout){ Clamshell::CLI.start(["--settings=missing_file"])}
+        end.should raise_error(StandardError, /Settings file: missing_file, not found/)
+      end
     end
   end
 

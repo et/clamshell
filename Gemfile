@@ -6,4 +6,5 @@ gem "open4"
 group :test do
   gem "rake"
   gem "rspec"
+  gem "grit"
 end

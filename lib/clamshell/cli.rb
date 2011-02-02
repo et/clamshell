@@ -37,7 +37,8 @@ module Clamshell
 
       Clamshell.ui.info  "Validating dependencies."
       Clamshell.ui.debug Clamshell.settings
-      Dsl.build(file)
+
+      Clamshell.ui.info Dsl.build(file)
     end
   end
 end

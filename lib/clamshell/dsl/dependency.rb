@@ -5,7 +5,7 @@ module Clamshell
 
   class Git
     def initialize(uri, opts)
-      @uri    = uri
+      @uri    = File.expand_path(uri)
       @ref    = opts[:ref]
       @repo   = Grit::Repo.new(@uri)
     end

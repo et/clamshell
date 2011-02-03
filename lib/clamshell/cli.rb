@@ -35,7 +35,7 @@ module Clamshell
     def check(file)
       raise "File: #{file}, not found" unless File.exist?(file)
 
-      Clamshell.ui.info  "Validating dependencies."
+      #Clamshell.ui.info  "Validating dependencies."
       Clamshell.ui.debug Clamshell.settings
 
       Clamshell.ui.info Dsl.build(file)

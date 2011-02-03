@@ -30,5 +30,22 @@ describe Clamshell::Project do
       @project.environment("bash", &block)
       @project.instance_variable_get(:@environment).class.should == Clamshell::Environment
     end
+
+    it "should handle embedded ruby" do
+      block = proc {
+        3.times do
+          env_var "FOO", "BAR"
+        end
+      }
+
+      out = <<-O.gsub /^\s+/, "".rstrip
+      export FOO="BAR"
+      export FOO="BAR"
+      export FOO="BAR"
+      O
+
+      @project.environment("bash", &block)
+      @project.inspect.should == out
+    end
   end
 end

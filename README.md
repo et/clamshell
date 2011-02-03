@@ -83,6 +83,11 @@ Currently, the shells supported are tcsh and bash. However, I am assuming that
 csh and zsh are supported as well since they are closely related to tcsh and
 bash, respectively. Hence, aliases are set up for their respective shells.
 
+What is most important to remember is that while this may seem like it's limiting
+the amount of shell statements you have at your disposal, it's quite the contrary.
+Since this is a ruby application, you now have a high level language to do your
+shell scripting.
+
 Refer to the spec fixtures for a full
 [example](http://github.com/et/clamshell/blob/master/spec/fixtures/Dependencies.list)
 of `Dependencies.list`.

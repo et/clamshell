@@ -38,7 +38,7 @@ describe Clamshell::Project do
         end
       }
 
-      out = <<-O.gsub /^\s+/, "".rstrip
+      out = <<-O.gsub(/^\s+/, "").chop
       export FOO="BAR"
       export FOO="BAR"
       export FOO="BAR"

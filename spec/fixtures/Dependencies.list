@@ -3,25 +3,4 @@ Project.configure "MyProject" do
   # Checks for a git repository located at /tmp/git_repo
   # whose HEAD points to a revision 182ed...
   #git "/tmp/git_repo", :ref => "182ed49c5fb4c42a63a18009ef2dbb87adb7044f"
-
-
-  ######################################
-  # The following will return:
-  # export DISTCC_HOSTS="localhost red green blue"
-  # export PATH="/usr/bin"
-  # export PATH="~/usr/bin:${PATH}"
-  # export PATH="~alice/bin:${PATH}"
-  # export PATH="~bob/bin:${PATH}"
-  # export PATH="~eve/bin:${PATH}"
-  #
-  environment("bash") do
-    env_var "DISTCC_HOSTS", "localhost red green blue"
-
-    env_var "PATH", "/usr/bin"
-    env_var "PATH", :prepend => "~/usr/bin", :delimiter => ":"
-
-    ["~alice/bin", "~bob/bin", "~eve/bin"].each do |p|
-      env_var "PATH", :prepend => p, :delimiter => ":"
-    end
-  end
 end

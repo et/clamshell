@@ -3,14 +3,14 @@ $:.unshift(File.dirname(__FILE__)) unless
 
 module Clamshell
 
-  autoload :Dsl,        'clamshell/dsl'
-  autoload :Settings,   'clamshell/settings'
-  autoload :UI,         'clamshell/ui'
-  autoload :SilentUI,   'clamshell/ui'
+  autoload :Dsl,         'clamshell/dsl'
+  autoload :Settings,    'clamshell/settings'
+  autoload :UI,          'clamshell/ui'
+  autoload :SilentUI,    'clamshell/ui'
+  autoload :Environment, 'clamshell/environment'
 
   autoload :Project,     'clamshell/dsl/project'
   autoload :Git,         'clamshell/dsl/dependency'
-  autoload :Environment, 'clamshell/dsl/environment'
 
   class SafeExit < StandardError; end
   class DslError < StandardError; end

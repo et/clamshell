@@ -2,6 +2,20 @@ require 'spec_helper'
 
 describe Clamshell::Environment do
 
+  describe "shell setup" do
+    it "should raise an error when no shell option is given" do
+      lambda do
+        Clamshell::Environment.setup
+      end.should raise_error(RuntimeError, /No shell specified/)
+    end
+
+    it "should set the shell to the one given on the command line" do
+      Clamshell.settings[:shell] = "bash"
+      Clamshell::Environment.setup.should_not raise_error
+      Clamshell.settings[:shell] = nil
+    end
+  end
+
   describe "shell initializer" do
     it "should set up a tcsh shell" do
       Clamshell::Environment.new("tcsh").shell.should == Clamshell::TcshAdapter
@@ -25,25 +39,7 @@ describe Clamshell::Environment do
       end.should raise_error(RuntimeError, /Unsupported shell/)
     end
 
-    describe "shell option" do
-      it "should raise an error when no shell option is given" do
-        lambda do
-          Clamshell::Environment.new
-        end.should raise_error(RuntimeError, /No shell specified/)
-      end
-
-      it "should set the shell to the one given on the command line" do
-        Clamshell.settings[:shell] = "bash"
-        Clamshell::Environment.new.shell.should == Clamshell::BashAdapter
-        Clamshell.settings[:shell] = nil
-      end
-
-      it "should override the shell given as the initialize" do
-        Clamshell.settings[:shell] = "tcsh"
-        Clamshell::Environment.new("bash").shell.should == Clamshell::TcshAdapter
-        Clamshell.settings[:shell] = nil
-      end
-    end
+    
   end
 
   describe 'shell specific' do

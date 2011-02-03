@@ -11,24 +11,23 @@ describe Clamshell::CLI do
 
   describe "#initialize" do
 
-    describe "shell" do
-
-      it "should by default give a color shell" do
-        capture(:stdout) do
-          Clamshell::CLI.start
+    context "options" do
+      describe "color" do
+        it "should by default give a color ui" do
+          capture(:stdout) do
+            Clamshell::CLI.start
+          end
+          Clamshell.ui.instance_variable_get(:@shell).class.should == Thor::Shell::Color
         end
-        Clamshell.ui.instance_variable_get(:@shell).class.should == Thor::Shell::Color
+
+        it "should give a basic ui for --no_color" do
+          capture(:stdout) do
+            Clamshell::CLI.start(["--no_color"])
+          end
+          Clamshell.ui.instance_variable_get(:@shell).class.should == Thor::Shell::Basic
+        end
       end
 
-      it "should give a basic shell for --no_color" do
-        capture(:stdout) do
-          Clamshell::CLI.start(["--no_color"])
-        end
-        Clamshell.ui.instance_variable_get(:@shell).class.should == Thor::Shell::Basic
-      end
-    end
-
-    describe "options" do
       it "#--verbose, should turn on debug statements" do
         capture(:stdout) do
           Clamshell::CLI.start(["--verbose"])
@@ -37,38 +36,42 @@ describe Clamshell::CLI do
       end
 
       it "#--disable, raises a safe system exit error" do
-        lambda do
-          capture(:stdout){ Clamshell::CLI.start(["--disable"])}
-        end.should raise_error(Clamshell::SafeExit, /Skipping dependency checks, you're on your own!/)
+        lambda { capture(:stdout){ Clamshell::CLI.start(["--disable"])}}.should raise_error SystemExit
       end
 
       it "#--settings, raises an error on a missing file" do
-        lambda do
-          capture(:stdout){ Clamshell::CLI.start(["--settings=missing_file"])}
-        end.should raise_error(StandardError, /Settings file: missing_file, not found/)
+        test_missing_file(["--settings=/some/missing/missing_file"])
       end
     end
   end
 
   describe "#check" do
-    it "shows an error for no file given" do
-      capture(:stderr){ Clamshell::CLI.start(["check"])}.should =~ /"check" was called incorrectly/
-    end
-
     it "shows an error for a file not found" do
-      lambda { Clamshell::CLI.start(["check", "missing_file"])}.should raise_error(StandardError, /File: missing_file, not found/)
+      test_missing_file(["check", "missing_file"])
     end
 
-    it "shows an info statements about to read a file" do
-      file = Tempfile.new('empty_file')
-      begin
-        capture(:stdout) do
-          Clamshell::CLI.start(["check", file])
-        end.should =~ /Validating dependencies/
-      ensure
-        file.close
-        file.unlink
-      end
+    it "should attempt to check a dependencies file" do
+      lambda do
+        capture(:stdout){ Clamshell::CLI.start(["check", "#{FIXTURES_DIR}/Dependencies.list"])}
+      end.should_not raise_error
     end
   end
+
+  describe "#convert" do
+    it "shows an error for a file not found" do
+      test_missing_file(["convert", "missing_file"])
+    end
+
+    it "should attempt to convert an environment file" do
+      lambda do
+        capture(:stdout){ Clamshell::CLI.start(["convert", "#{FIXTURES_DIR}/Shell.env"])}
+      end.should_not raise_error
+    end
+  end
+end
+
+def test_missing_file(argv)
+  lambda do
+    capture(:stderr){ Clamshell::CLI.start(argv)}
+  end.should raise_error(SystemExit, /File: \S*, not found/)
 end

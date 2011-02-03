@@ -1,18 +1,7 @@
-A work in progress, adding a [README](http://tom.preston-werner.com/2010/08/23/readme-driven-development.html).
-
 # Clamshell
 
-Inspired by [bundler](http://gembundler.com), clamshell is a tool that manages
-project dependencies. However, there are some differences:
-
-* Bundler works for only ruby projects, clamshell works for all projects
-  reguardless of the language.
-* Bundler checks to see if the correct depedencies (gems) are installed. If
-  not, then it installs it for the user. Clamshell only does the former.
-
-Additionally, clamshell has functionality to prepare environment settings (such
-as setting aliases, environment variables, etc.) that works reguardless of the
-user's running shell (bash, tcsh).
+Clamshell is a tool that validates your project's dependencies in
+a cross-shell compatible environment.
 
 ## Requirements
 
@@ -30,35 +19,41 @@ Install the required gems using `bundler`.
 
     bundle install
 
-## Setting up a project dependency file
+## Dependency file
 
 In your project root directory, set up a file called `Dependencies.list`:
 
-    Project.configure "MyProject" {
+    Dependencies.validate do
       git "/path/to/git/repo", :ref => "12345SHAID"
-    }
+    end
 
 In plain English, this says: "The project, `MyProject` has one dependency to a git
 repository located at `/path/to/git/repo` whose `HEAD` must be pointing to `12345SHAID`".
 This assumes that the directory contains a `.git` directory.
 
-###  Environment section
+You can check a dependencies file:
 
-Sometimes your project has a dependency that is shell specific. You can set it
-up as follows:
+    clamshell check Dependencies.list
 
-    Project.configure ("MyProject") {
-      environment("bash") {
-        env_var "DISTCC_HOSTS" "localhost red green blue"
+which will validate whether or not the listed dependencies are up to date.
 
-        env_var "PATH", :prepend => "~/bin",    :delimiter => ":"
-        env_var "PATH", :append  => "/usr/bin", :delimiter => ":"
+##  Environment file
 
-        alias editor "vim"
-      }
-    }
+Sometimes your project has a dependency that is shell specific (environment variables,
+aliases). Setup a `SHELL.env` file in your project root with the following:
 
-When run, this will print the following to standard out.
+    Environment.setup ("bash") do
+      env_var "DISTCC_HOSTS" "localhost red green blue"
+      env_var "PATH", :prepend => "~/bin",    :delimiter => ":"
+      env_var "PATH", :append  => "/usr/bin", :delimiter => ":"
+      alias editor "vim"
+    end
+
+You can convert these statements to bash statements as follows:
+
+    clamshell convert SHELL.env
+
+which will print the following to standard out:
 
     export DISTCC_HOSTS='localhost red green blue'
     export PATH=~/bin:$PATH
@@ -67,7 +62,7 @@ When run, this will print the following to standard out.
 
 You also do not have specify a shell:
 
-    environment do
+    environment.setup do
       ...
       ...
     end
@@ -83,27 +78,10 @@ Currently, the shells supported are tcsh and bash. However, I am assuming that
 csh and zsh are supported as well since they are closely related to tcsh and
 bash, respectively. Hence, aliases are set up for their respective shells.
 
-What is most important to remember is that while this may seem like it's limiting
-the amount of shell statements you have at your disposal, it's quite the contrary.
-Since this is a ruby application, you now have a high level language to do your
-shell scripting.
 
-Refer to the spec fixtures for a full
-[example](http://github.com/et/clamshell/blob/master/spec/fixtures/Dependencies.list)
-of `Dependencies.list`.
+## Options
 
-
-## Usage
-
-Run `clamshell` over your `Dependencies.list` file you've just created.
-
-    % clamshell check Dependencies.list
-
-It any dependencies are out of date, they will be listed in red.
-
-### Options
-
-#### Boolean options
+### Boolean options
 
 * `--no-color`       - Disables color
 * `--disable`        - Disables clamshell from running (useful if you use clamshell in some kind of continuous integration)
@@ -111,12 +89,12 @@ It any dependencies are out of date, they will be listed in red.
 * `--git_auto_reset` - Attempts to `git reset` each of the git repositories to the requested revision. (FIXME)
 * `--git_auto_pull`  - Attempts to `git pull` each of the git repositories' origins. (FIXME)
 
-#### String options
+### String options
 
 * `--shell=SHELLNAME` - The environment section will generate shell statements for `SHELLNAME`. This is required if a shell name is not specified in your environment section.
 * `--shell_out=SHELL_OUT.txt` - Pipe the generated shell statements to a file. (FIXME)
 
-#### Settings
+### Settings
 
 All of the above options can be localized to a settings file. To do so, set
 up a file called `settings.yml` and invoke `clamshell` as follows.

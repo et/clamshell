@@ -34,9 +34,9 @@ Install the required gems using `bundler`.
 
 In your project root directory, set up a file called `Dependencies.list`:
 
-    Project.configure "MyProject" do
+    Project.configure "MyProject" {
       git "/path/to/git/repo", :ref => "12345SHAID"
-    end
+    }
 
 In plain English, this says: "The project, `MyProject` has one dependency to a git
 repository located at `/path/to/git/repo` whose `HEAD` must be pointing to `12345SHAID`".
@@ -47,16 +47,16 @@ This assumes that the directory contains a `.git` directory.
 Sometimes your project has a dependency that is shell specific. You can set it
 up as follows:
 
-    Project.configure ("MyProject") do
-      environment("bash") do
+    Project.configure ("MyProject") {
+      environment("bash") {
         env_var "DISTCC_HOSTS" "localhost red green blue"
 
         env_var "PATH", :prepend => "~/bin",    :delimiter => ":"
         env_var "PATH", :append  => "/usr/bin", :delimiter => ":"
 
         alias editor "vim"
-      end
-    end
+      }
+    }
 
 When run, this will print the following to standard out.
 

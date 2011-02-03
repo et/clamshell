@@ -1,3 +1,5 @@
+require 'tempfile'
+
 require 'spec_helper'
 require 'clamshell/cli'
 
@@ -26,23 +28,25 @@ describe Clamshell::CLI do
       end
     end
 
-    it "#--verbose, should turn on debug statements" do
-      capture(:stdout) do
-        Clamshell::CLI.start(["--verbose"])
+    describe "options" do
+      it "#--verbose, should turn on debug statements" do
+        capture(:stdout) do
+          Clamshell::CLI.start(["--verbose"])
+        end
+        Clamshell.ui.instance_variable_get(:@debug).should be_true
       end
-      Clamshell.ui.instance_variable_get(:@debug).should be_true
-    end
 
-    it "#--disable, raises a safe system exit error" do
-      lambda do
-        capture(:stdout){ Clamshell::CLI.start(["--disable"])}
-      end.should raise_error(Clamshell::SafeExit, /Skipping dependency checks, you're on your own!/)
-    end
+      it "#--disable, raises a safe system exit error" do
+        lambda do
+          capture(:stdout){ Clamshell::CLI.start(["--disable"])}
+        end.should raise_error(Clamshell::SafeExit, /Skipping dependency checks, you're on your own!/)
+      end
 
-    it "#--settings, raises an error on a missing file" do
-      lambda do
-        capture(:stdout){ Clamshell::CLI.start(["--settings=missing_file"])}
-      end.should raise_error(StandardError, /Settings file: missing_file, not found/)
+      it "#--settings, raises an error on a missing file" do
+        lambda do
+          capture(:stdout){ Clamshell::CLI.start(["--settings=missing_file"])}
+        end.should raise_error(StandardError, /Settings file: missing_file, not found/)
+      end
     end
   end
 
@@ -55,16 +59,16 @@ describe Clamshell::CLI do
       lambda { Clamshell::CLI.start(["check", "missing_file"])}.should raise_error(StandardError, /File: missing_file, not found/)
     end
 
-    # Todo - Make this test a little better.
     it "shows an info statements about to read a file" do
-      extract_repo(GIT_REPO_PATH,        'git_repo.tar.gz')
-
-      file = FIXTURES_DIR + '/Dependencies.list'
-      capture(:stdout) do
-        Clamshell::CLI.start(["check", file])
-      end.should =~ /export DISTCC/
-
-      FileUtils.rm_rf(GIT_REPO_PATH)
+      file = Tempfile.new('empty_file')
+      begin
+        capture(:stdout) do
+          Clamshell::CLI.start(["check", file])
+        end.should =~ /Validating dependencies/
+      ensure
+        file.close
+        file.unlink
+      end
     end
   end
 end

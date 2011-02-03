@@ -14,6 +14,7 @@ module Clamshell
 
   class SafeExit < StandardError; end
   class DslError < StandardError; end
+  class GitError < StandardError; end
 
   class << self
     attr_writer :ui, :settings

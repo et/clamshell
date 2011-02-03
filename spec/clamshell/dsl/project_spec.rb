@@ -13,10 +13,14 @@ describe Clamshell::Project do
 
   describe "git" do
     it "should create a Git dependency" do
-      @project.git("/path/to/git/repo.git", :ref => "12345")
+      create_repo("/tmp/repo")
+
+      @project.git("/tmp/repo", :ref => "12345")
       @project.instance_variable_get(:@dependencies).one? do |d|
         d.class == Clamshell::Git
       end.should be_true
+
+      FileUtils.rm_rf("/tmp/repo")
     end
   end
 
@@ -25,6 +29,23 @@ describe Clamshell::Project do
       block = proc {}
       @project.environment("bash", &block)
       @project.instance_variable_get(:@environment).class.should == Clamshell::Environment
+    end
+
+    it "should handle embedded ruby" do
+      block = proc {
+        3.times do
+          env_var "FOO", "BAR"
+        end
+      }
+
+      out = <<-O.gsub(/^\s+/, "").chop
+      export FOO="BAR"
+      export FOO="BAR"
+      export FOO="BAR"
+      O
+
+      @project.environment("bash", &block)
+      @project.inspect.should == out
     end
   end
 end

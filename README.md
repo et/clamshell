@@ -34,30 +34,31 @@ Install the required gems using `bundler`.
 
 In your project root directory, set up a file called `Dependencies.list`:
 
-    Project.configure "MyProject" do
-      git "/path/to/git/repo.git", :ref => "12345SHAID"
-    end
+    Project.configure "MyProject" {
+      git "/path/to/git/repo", :ref => "12345SHAID"
+    }
 
 In plain English, this says: "The project, `MyProject` has one dependency to a git
-repository located at `/path/to/git/repo.git` whose `HEAD` must be pointing to `12345SHAID`"
+repository located at `/path/to/git/repo` whose `HEAD` must be pointing to `12345SHAID`".
+This assumes that the directory contains a `.git` directory.
 
 ###  Environment section
 
 Sometimes your project has a dependency that is shell specific. You can set it
 up as follows:
 
-    Project.configure ("MyProject") do
-      environment("bash") do
+    Project.configure ("MyProject") {
+      environment("bash") {
         env_var "DISTCC_HOSTS" "localhost red green blue"
 
         env_var "PATH", :prepend => "~/bin",    :delimiter => ":"
         env_var "PATH", :append  => "/usr/bin", :delimiter => ":"
 
         alias editor "vim"
-      end
-    end
+      }
+    }
 
-When run, this will print the following to standard out (or to a file using the `--shell-out=SHELL_OUT.txt` flag).
+When run, this will print the following to standard out.
 
     export DISTCC_HOSTS='localhost red green blue'
     export PATH=~/bin:$PATH
@@ -82,6 +83,11 @@ Currently, the shells supported are tcsh and bash. However, I am assuming that
 csh and zsh are supported as well since they are closely related to tcsh and
 bash, respectively. Hence, aliases are set up for their respective shells.
 
+What is most important to remember is that while this may seem like it's limiting
+the amount of shell statements you have at your disposal, it's quite the contrary.
+Since this is a ruby application, you now have a high level language to do your
+shell scripting.
+
 Refer to the spec fixtures for a full
 [example](http://github.com/et/clamshell/blob/master/spec/fixtures/Dependencies.list)
 of `Dependencies.list`.
@@ -102,13 +108,13 @@ It any dependencies are out of date, they will be listed in red.
 * `--no-color`       - Disables color
 * `--disable`        - Disables clamshell from running (useful if you use clamshell in some kind of continuous integration)
 * `--verbose`        - Prints debugging information.
-* `--git_auto_reset` - Attempts to `git reset` each of the git repositories to the requested revision.
-* `--git_auto_pull`  - Attempts to `git pull` each of the git repositories' origins.
+* `--git_auto_reset` - Attempts to `git reset` each of the git repositories to the requested revision. (FIXME)
+* `--git_auto_pull`  - Attempts to `git pull` each of the git repositories' origins. (FIXME)
 
 #### String options
 
 * `--shell=SHELLNAME` - The environment section will generate shell statements for `SHELLNAME`. This is required if a shell name is not specified in your environment section.
-* `--shell_out=SHELL_OUT.txt` - Pipe the generated shell statements to a file.
+* `--shell_out=SHELL_OUT.txt` - Pipe the generated shell statements to a file. (FIXME)
 
 #### Settings
 
@@ -130,3 +136,4 @@ of `settings.yml`.
 * If the output it to be sourced then use echo statements
 * Check if apps exist in user's PATH.
 * Throw error status code if a dependency is not fulfilled.
+* shell_out flag implementation.

@@ -35,11 +35,12 @@ Install the required gems using `bundler`.
 In your project root directory, set up a file called `Dependencies.list`:
 
     Project.configure "MyProject" do
-      git "/path/to/git/repo.git", :ref => "12345SHAID"
+      git "/path/to/git/repo", :ref => "12345SHAID"
     end
 
 In plain English, this says: "The project, `MyProject` has one dependency to a git
-repository located at `/path/to/git/repo.git` whose `HEAD` must be pointing to `12345SHAID`"
+repository located at `/path/to/git/repo` whose `HEAD` must be pointing to `12345SHAID`".
+This assumes that the directory contains a `.git` directory.
 
 ###  Environment section
 
@@ -108,7 +109,7 @@ It any dependencies are out of date, they will be listed in red.
 #### String options
 
 * `--shell=SHELLNAME` - The environment section will generate shell statements for `SHELLNAME`. This is required if a shell name is not specified in your environment section.
-* `--shell_out=SHELL_OUT.txt` - Pipe the generated shell statements to a file.
+* `--shell_out=SHELL_OUT.txt` - Pipe the generated shell statements to a file. (FIXME)
 
 #### Settings
 

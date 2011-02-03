@@ -8,12 +8,12 @@ describe Clamshell::Git do
 
   describe "basic validation tests" do
     before :all do
-      @repo_git_dir = File.join(CLAMSHELL_DIR, REPO_NAME, "/.git")
+      @repo_dir = File.join(CLAMSHELL_DIR, REPO_NAME)
 
       repo = create_repo(File.join(CLAMSHELL_DIR, REPO_NAME))
 
-      @good_git = Clamshell::Git.new(@repo_git_dir, :ref => repo.commits.first.id)
-      @bad_git  = Clamshell::Git.new(@repo_git_dir, :ref => "123abc")
+      @good_git = Clamshell::Git.new(@repo_dir, :ref => repo.commits.first.id)
+      @bad_git  = Clamshell::Git.new(@repo_dir, :ref => "123abc")
     end
 
     after :all do

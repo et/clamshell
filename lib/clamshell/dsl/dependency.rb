@@ -1,4 +1,3 @@
-require 'fileutils'
 require 'open4'
 
 module Clamshell
@@ -12,12 +11,8 @@ module Clamshell
 
     def initialize(uri, opts)
       super
-      @uri    = validate_dir(uri)
+      @uri    = uri
       @ref    = opts[:ref]
-
-      if opts[:remote]
-        @remote = validate_dir(opts[:remote])
-      end
     end
 
     def name
@@ -33,15 +28,6 @@ module Clamshell
 
     private
       def valid?
-        return true if @ref == git_head
-
-        if (Clamshell.settings[:git_auto_pull])
-          git "pull #{@remote} -q" if @remote
-        end
-
-        if (Clamshell.settings[:git_auto_checkout])
-          git "reset #{@ref}"
-        end
         @ref == git_head
       end
 

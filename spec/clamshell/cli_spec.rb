@@ -72,13 +72,11 @@ describe Clamshell::CLI do
         capture(:stdout){ Clamshell::CLI.start(["convert", "#{FIXTURES_DIR}/Shell.env"])}.should_not be_empty
       end
 
-      describe "#--shell-out" do
-        it "should output to a file" do
-          file = mock('file')
-          File.should_receive(:open).with("filename", "w").and_yield(file)
-          file.should_receive(:write)
-          Clamshell::CLI.start(["convert", "#{FIXTURES_DIR}/Shell.env", "--shell-out=filename"])
-        end
+      it "#--shell-out, should output to a file" do
+        file = mock('file')
+        File.should_receive(:open).with("filename", "w").and_yield(file)
+        file.should_receive(:write)
+        Clamshell::CLI.start(["convert", "#{FIXTURES_DIR}/Shell.env", "--shell-out=filename"])
       end
     end
   end

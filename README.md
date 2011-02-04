@@ -96,6 +96,22 @@ which will validate whether or not the listed dependencies are up to date.
 * `--disable`        - Disables clamshell from running (useful if you use clamshell in some kind of continuous integration)
 * `--verbose`        - Prints debugging information.
 
+## Best practices
+
+To use clamshell effectively, it's best to first convert your environment file
+to your all the required shells using it.
+
+    clamshell convert Shell.env --shell-out=Shell.bash
+    clamshell convert Shell.env --shell-out=Shell.tcsh
+
+Then set up a file called `Project.clamshell` in your project root directory
+that contains the following:
+
+    source SHELL.`ps -p $$ | awk 'NR==2 {print $4}'`
+    clamshell check Dependencies.list
+
+which sources the generate shell statements then checks the dependencies.
+
 ## Todo
 
 * More git options -- reference more than SHA_ids (branch, tag, etc.)

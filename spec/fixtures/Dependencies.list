@@ -1,8 +1,16 @@
 Dependencies.validate do
-  # Checks for a git repository located at /tmp/repoA
-  # whose HEAD points to a revision 182ed...
-  # and another git repository located at /tmp/repoB
-  # who HEAD points to a tag TAG
+  # Checks for three git repositories:
+  #
+  # First is located at /tmp/repoA
+  # who is on the master branch and its HEAD points to a revision 182ed...
+  #
+  # Second is located at /tmp/repoB
+  # who is on the master branch and its HEAD points to a tag TAG
+  #
+  # Third is located at /tmp/repoC
+  # who is on the slave branch and its HEAD points to a revision 3241a...
+
   #git "/tmp/repoA", :rev => "182ed49c5fb4c42a63a18009ef2dbb87adb7044f"
   #git "/tmp/repoB", :tag => "TAG"
+  #git "/tmp/repoC", :branch => "slave", :rev => "3241ab4c42a63a18009ef2dbb87adb7044f"
 end

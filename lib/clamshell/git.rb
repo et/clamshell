@@ -4,12 +4,17 @@ require 'grit'
 module Clamshell
 
   class Git
-    def initialize(uri, opts)
+    def initialize(uri, opts = {})
       @uri    = File.expand_path(uri)
       @repo   = Grit::Repo.new(@uri)
+      @branch = opts[:branch] || "master"
+
+      unless @repo.heads.any? {|h| h.name == @branch }
+        raise_error "does not have a branch named #{@branch}"
+      end
 
       if opts[:rev]
-        unless @repo.commits.any? {|c| c.id == opts[:rev]}
+        if @repo.commits(opts[:rev]).empty?
           raise_error "does not have a revision #{opts[:rev]}"
         end
         @ref = opts[:rev]
@@ -23,6 +28,8 @@ module Clamshell
           raise_error "does not have a tag named #{opts[:tag]}"
         end
       end
+
+      raise_error "must have a :rev or :tag specified." unless @ref
     end
 
     def name
@@ -37,11 +44,19 @@ module Clamshell
 
     private
       def valid?
-        @ref == git_head
+        valid_head? && valid_ref?
+      end
+
+      def valid_head?
+        @branch.strip == @repo.head.name.strip
+      end
+
+      def valid_ref?
+        @ref.strip == @repo.head.commit.id.strip
       end
 
       def git_head
-        @repo.commits.first.id
+        @repo.head.commit.id
       end
 
       def raise_error(msg)

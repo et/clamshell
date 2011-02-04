@@ -107,10 +107,11 @@ to your all the required shells using it.
 Then set up a file called `Project.clamshell` in your project root directory
 that contains the following:
 
-    source SHELL.`ps -p $$ | awk 'NR==2 {print $4}'`
+    source Shell.`ps -p $$ | awk 'NR==2 {print $4}'`
     clamshell check Dependencies.list
 
-which sources the generate shell statements then checks the dependencies.
+and call it with `source Project.clamshell`. This will source the correct shell
+statements then check the dependencies.
 
 ## Todo
 

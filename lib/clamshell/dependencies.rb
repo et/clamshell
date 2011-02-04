@@ -1,15 +1,14 @@
 module Clamshell
-  class Project
+  class Dependencies
 
-    def self.configure(name, &block)
-      d = new(name)
+    def self.validate(&block)
+      d = new
       d.instance_eval(&block)
       return d
     end
 
-    def initialize(name)
+    def initialize
       @dependencies = []
-      @name         = name
     end
 
     def git(uri, opts = {})

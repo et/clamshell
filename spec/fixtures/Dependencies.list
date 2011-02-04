@@ -1,5 +1,4 @@
-Project.configure "MyProject" do
-
+Dependencies.validate do
   # Checks for a git repository located at /tmp/git_repo
   # whose HEAD points to a revision 182ed...
   #git "/tmp/git_repo", :ref => "182ed49c5fb4c42a63a18009ef2dbb87adb7044f"

@@ -2,11 +2,15 @@ require 'spec_helper'
 
 describe Clamshell::Environment do
 
-  describe "shell setup" do
+  describe "setup" do
     it "should raise an error when no shell is given" do
       lambda do
         Clamshell::Environment.setup( & proc{})
       end.should raise_error(RuntimeError, /No shell specified/)
+    end
+
+    it "should return an Environment object" do
+      Clamshell::Environment.setup("bash", & proc{}).class.should == Clamshell::Environment
     end
   end
 

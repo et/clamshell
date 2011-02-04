@@ -19,28 +19,19 @@ Install the required gems using `bundler`.
 
     bundle install
 
-## Dependency file
+## Clamshell files
 
-In your project root directory, set up a file called `Dependencies.list`:
+Clamshell takes two types of files:
 
-    Dependencies.validate do
-      git "/path/to/git/repo", :ref => "12345SHAID"
-    end
+* An environment file that contains a list of shell specific statements that should be `source`d for your project.
+* A dependencies file that contains a list of dependencies required for your project.
 
-In plain English, this says: "The project, `MyProject` has one dependency to a git
-repository located at `/path/to/git/repo` whose `HEAD` must be pointing to `12345SHAID`".
-This assumes that the directory contains a `.git` directory.
-
-You can check a dependencies file:
-
-    clamshell check Dependencies.list
-
-which will validate whether or not the listed dependencies are up to date.
+Both of these files may have ruby code embedded in them.
 
 ##  Environment file
 
 Sometimes your project has a dependency that is shell specific (environment variables,
-aliases). Setup a `SHELL.env` file in your project root with the following:
+aliases). Setup a `Shell.env` file in your project root with the following:
 
     Environment.setup ("bash") do
       env_var "DISTCC_HOSTS" "localhost red green blue"
@@ -55,15 +46,16 @@ You can convert these statements to bash statements as follows:
 
 which will print the following to standard out:
 
-    export DISTCC_HOSTS='localhost red green blue'
+    export DISTCC_HOSTS="localhost red green blue"
     export PATH=~/bin:$PATH
     export PATH=$PATH:/usr/bin
-    alias editor='vim'
+    alias editor="vim"
 
-You also do not have specify a shell:
+### Shell independence
 
-    environment.setup do
-      ...
+Your environment file doesn't even need to specify a shell:
+
+    Environment.setup do
       ...
     end
 
@@ -79,33 +71,30 @@ csh and zsh are supported as well since they are closely related to tcsh and
 bash, respectively. Hence, aliases are set up for their respective shells.
 
 
-## Options
+## Dependencies file
 
-### Boolean options
+In your project root directory, set up a file called `Dependencies.list`:
+
+    Dependencies.validate do
+      git "/path/to/git/repo", :ref => "12345SHAID"
+    end
+
+In plain English, this says: "This project has one dependency to a git
+repository located at `/path/to/git/repo` whose `HEAD` must be pointing to `12345SHAID`".
+This assumes that the directory contains a `.git` directory.
+
+You can check a dependencies file:
+
+    clamshell check Dependencies.list
+
+which will validate whether or not the listed dependencies are up to date.
+
+
+## Global options
 
 * `--no-color`       - Disables color
 * `--disable`        - Disables clamshell from running (useful if you use clamshell in some kind of continuous integration)
 * `--verbose`        - Prints debugging information.
-* `--git_auto_reset` - Attempts to `git reset` each of the git repositories to the requested revision. (FIXME)
-* `--git_auto_pull`  - Attempts to `git pull` each of the git repositories' origins. (FIXME)
-
-### String options
-
-* `--shell=SHELLNAME` - The environment section will generate shell statements for `SHELLNAME`. This is required if a shell name is not specified in your environment section.
-* `--shell_out=SHELL_OUT.txt` - Pipe the generated shell statements to a file. (FIXME)
-
-### Settings
-
-All of the above options can be localized to a settings file. To do so, set
-up a file called `settings.yml` and invoke `clamshell` as follows.
-
-     % clamshell check Dependencies.list --settings=/path/to/settings.yml
-
-Any flags used on the command line will override what is in `settings.yml` file.
-Refer to the spec fixtures for a full
-[example](http://github.com/et/clamshell/blob/master/spec/fixtures/settings.yml)
-of `settings.yml`.
-
 
 ## Todo
 
@@ -115,3 +104,4 @@ of `settings.yml`.
 * Check if apps exist in user's PATH.
 * Throw error status code if a dependency is not fulfilled.
 * shell_out flag implementation.
+* Make clamopts file.

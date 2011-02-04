@@ -83,7 +83,7 @@ In plain English, this says: "This project has one dependency to a git
 repository located at `/path/to/git/repo` whose `HEAD` must be pointing to `12345SHAID`".
 This assumes that the directory contains a `.git` directory.
 
-Valid options include `:rev => SHA_ID`, `:tag => TAG`, and `:branch => BRANCH`.
+Valid options include `:rev => SHA_ID` and `:tag => TAG`.
 The `master` branch is implied to be the `HEAD`, but you can use the `:branch => BRANCH`
 option to specify otherwise.
 
@@ -92,6 +92,8 @@ You can check a dependencies file:
     clamshell check Dependencies.list
 
 which will validate whether or not the listed dependencies are up to date.
+
+Refer to the spec's fixtures for an (example)[https://github.com/et/clamshell/blob/master/spec/fixtures/Dependencies.list].
 
 
 ## Global options

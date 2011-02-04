@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'git_helper'
 
 describe Clamshell::Dependencies do
 

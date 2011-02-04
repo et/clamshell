@@ -9,7 +9,7 @@ module Clamshell
 
   autoload :Environment,  'clamshell/environment'
   autoload :Dependencies, 'clamshell/dependencies'
-  autoload :Git,          'clamshell/dependency'
+  autoload :Git,          'clamshell/git'
 
   class SafeExit < StandardError; end
   class DslError < StandardError; end

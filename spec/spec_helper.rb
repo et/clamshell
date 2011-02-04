@@ -2,7 +2,6 @@ $:.unshift(File.dirname(__FILE__) + '/../lib')
 require 'clamshell'
 require 'rspec'
 require 'stringio'
-require 'grit'
 
 FIXTURES_DIR = File.dirname(__FILE__) + '/fixtures'
 
@@ -21,16 +20,4 @@ RSpec.configure do |config|
 
     result
   end
-end
-
-
-# Expects /tmp/repo
-def create_repo(path)
-  repo = Grit::Repo.init(path)
-  Dir.chdir(path) do
-    FileUtils.touch("test")
-    repo.add('.')
-    repo.commit_all("Adding a test file")
-  end
-  repo
 end

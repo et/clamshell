@@ -76,12 +76,14 @@ bash, respectively. Hence, aliases are set up for their respective shells.
 In your project root directory, set up a file called `Dependencies.list`:
 
     Dependencies.validate do
-      git "/path/to/git/repo", :ref => "12345SHAID"
+      git "/path/to/git/repoA", :rev => "12345SHAID"
     end
 
 In plain English, this says: "This project has one dependency to a git
 repository located at `/path/to/git/repo` whose `HEAD` must be pointing to `12345SHAID`".
 This assumes that the directory contains a `.git` directory.
+
+Valid options include `:rev => SHA_ID` and `:tag => TAG`
 
 You can check a dependencies file:
 

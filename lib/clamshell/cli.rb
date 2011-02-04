@@ -3,8 +3,6 @@ require 'thor'
 module Clamshell
   class CLI < Thor
 
-    class_option :settings, :type => :string,  :banner => "File with settings overrides"
-
     class_option :no_color, :type => :boolean, :banner => "Disable color"
     class_option :verbose,  :type => :boolean, :banner => "More verbose output"
     class_option :disable,  :type => :boolean, :banner => "Disable clamshell"
@@ -30,10 +28,17 @@ module Clamshell
     end
 
     desc "convert FILE", "Converts an environment file to shell statements"
-    method_option :shell, :type => :string
+    method_option :shell,     :type => :string, :banner => "Shell to create statements for"
+    method_option :shell_out, :type => :string, :banner => "File to output to"
     def convert(file)
       check_file(file)
-      Clamshell.ui.info Dsl.build(file)
+
+      file_out = Clamshell.settings[:shell_out]
+      if file_out
+        File.open(file_out, "w") {|f| f.write(Dsl.build(file)) }
+      else
+        Clamshell.ui.info Dsl.build(file)
+      end
     end
 
     private

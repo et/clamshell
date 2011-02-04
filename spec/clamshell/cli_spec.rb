@@ -26,7 +26,7 @@ describe Clamshell::CLI do
 
         it "should give a basic ui for --no_color" do
           capture(:stdout) do
-            Clamshell::CLI.start(["--no_color"])
+            Clamshell::CLI.start(["--no-color"])
           end
           Clamshell.ui.instance_variable_get(:@shell).class.should == Thor::Shell::Basic
         end
@@ -62,15 +62,24 @@ describe Clamshell::CLI do
       test_missing_file(["convert", "missing_file"])
     end
 
-    it "should attempt to convert an environment file" do
-      lambda do
-        capture(:stdout){ Clamshell::CLI.start(["convert", "#{FIXTURES_DIR}/Shell.env"])}
-      end.should_not raise_error
-    end
-
     it "#--shell, it should set a shell option" do
       capture(:stdout){ Clamshell::CLI.start(["convert", "#{FIXTURES_DIR}/Shell.env", "--shell=bash"])}
       Clamshell.settings[:shell].should == "bash"
+    end
+
+    context "output" do
+      it "should print to standard out" do
+        capture(:stdout){ Clamshell::CLI.start(["convert", "#{FIXTURES_DIR}/Shell.env"])}.should_not be_empty
+      end
+
+      describe "#--shell-out" do
+        it "should output to a file" do
+          file = mock('file')
+          File.should_receive(:open).with("filename", "w").and_yield(file)
+          file.should_receive(:write)
+          Clamshell::CLI.start(["convert", "#{FIXTURES_DIR}/Shell.env", "--shell-out=filename"])
+        end
+      end
     end
   end
 end

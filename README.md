@@ -44,7 +44,7 @@ You can convert these statements to bash statements as follows:
 
     clamshell convert SHELL.env
 
-which will print the following to standard out:
+which will print the following to standard out (or to a file using the `--shell-out=FILE` flag).
 
     export DISTCC_HOSTS="localhost red green blue"
     export PATH=~/bin:$PATH

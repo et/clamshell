@@ -31,7 +31,7 @@ describe Clamshell::UI do
     it "should print blue info text" do
       capture(:stdout) do
         @ui.info(@text)
-      end.should == BLUE + @text + CLEAR + "\n"
+      end.should == @text + "\n"
     end
 
     it "should print yellow warning text" do

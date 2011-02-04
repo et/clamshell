@@ -21,7 +21,7 @@ module Clamshell
     end
 
     def info(text)
-      @shell.say(text, :blue)
+      @shell.say(text)
     end
 
     def warn(text)

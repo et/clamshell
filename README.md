@@ -93,7 +93,7 @@ You can check a dependencies file:
 
 which will validate whether or not the listed dependencies are up to date.
 
-Refer to the spec's fixtures for an (example)[https://github.com/et/clamshell/blob/master/spec/fixtures/Dependencies.list].
+Refer to the spec's fixtures for an [example](https://github.com/et/clamshell/blob/master/spec/fixtures/Dependencies.list).
 
 
 ## Global options

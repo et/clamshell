@@ -3,16 +3,10 @@ require 'spec_helper'
 describe Clamshell::Environment do
 
   describe "shell setup" do
-    it "should raise an error when no shell option is given" do
+    it "should raise an error when no shell is given" do
       lambda do
-        Clamshell::Environment.setup
+        Clamshell::Environment.setup( & proc{})
       end.should raise_error(RuntimeError, /No shell specified/)
-    end
-
-    it "should set the shell to the one given on the command line" do
-      Clamshell.settings[:shell] = "bash"
-      Clamshell::Environment.setup.should_not raise_error
-      Clamshell.settings[:shell] = nil
     end
   end
 
@@ -38,8 +32,6 @@ describe Clamshell::Environment do
         Clamshell::Environment.new("sea")
       end.should raise_error(RuntimeError, /Unsupported shell/)
     end
-
-    
   end
 
   describe 'shell specific' do
@@ -110,5 +102,18 @@ describe Clamshell::Environment do
         end
       end
     end
+  end
+
+  describe "to_s" do
+    block = proc {
+      env_var "FOO", "BAR"
+      env_var "BAZ", "BUZZ"
+    }
+
+    out = <<-O.gsub(/^\s+/, "").chop
+    export FOO="BAR"
+    export BAZ="BUZZ"
+    O
+    Clamshell::Environment.setup("bash", &block).inspect.should == out
   end
 end

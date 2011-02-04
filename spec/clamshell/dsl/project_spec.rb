@@ -23,29 +23,4 @@ describe Clamshell::Project do
       FileUtils.rm_rf("/tmp/repo")
     end
   end
-
-  describe "environment" do
-    it "should return an environment" do
-      block = proc {}
-      @project.environment("bash", &block)
-      @project.instance_variable_get(:@environment).class.should == Clamshell::Environment
-    end
-
-    it "should handle embedded ruby" do
-      block = proc {
-        3.times do
-          env_var "FOO", "BAR"
-        end
-      }
-
-      out = <<-O.gsub(/^\s+/, "").chop
-      export FOO="BAR"
-      export FOO="BAR"
-      export FOO="BAR"
-      O
-
-      @project.environment("bash", &block)
-      @project.inspect.should == out
-    end
-  end
 end

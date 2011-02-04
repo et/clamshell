@@ -7,10 +7,10 @@ module Clamshell
   autoload :Settings,    'clamshell/settings'
   autoload :UI,          'clamshell/ui'
   autoload :SilentUI,    'clamshell/ui'
-  autoload :Environment, 'clamshell/environment'
 
-  autoload :Project,     'clamshell/dsl/project'
-  autoload :Git,         'clamshell/dsl/dependency'
+  autoload :Environment, 'clamshell/environment'
+  autoload :Project,     'clamshell/project'
+  autoload :Git,         'clamshell/dependency'
 
   class SafeExit < StandardError; end
   class DslError < StandardError; end
@@ -24,7 +24,7 @@ module Clamshell
     end
 
     def settings
-      @settings ||= Settings.new
+      @settings ||= {}
     end
   end
 end

@@ -5,6 +5,10 @@ require 'clamshell/cli'
 
 describe Clamshell::CLI do
 
+  after :each do
+    Clamshell.settings = {}
+  end
+
   it "shows the help listing with no args" do
     capture(:stdout){ Clamshell::CLI.start }.should =~ /Tasks:/
   end
@@ -38,10 +42,6 @@ describe Clamshell::CLI do
       it "#--disable, raises a safe system exit error" do
         lambda { capture(:stdout){ Clamshell::CLI.start(["--disable"])}}.should raise_error SystemExit
       end
-
-      it "#--settings, raises an error on a missing file" do
-        test_missing_file(["--settings=/some/missing/missing_file"])
-      end
     end
   end
 
@@ -66,6 +66,11 @@ describe Clamshell::CLI do
       lambda do
         capture(:stdout){ Clamshell::CLI.start(["convert", "#{FIXTURES_DIR}/Shell.env"])}
       end.should_not raise_error
+    end
+
+    it "#--shell, it should set a shell option" do
+      capture(:stdout){ Clamshell::CLI.start(["convert", "#{FIXTURES_DIR}/Shell.env", "--shell=bash"])}
+      Clamshell.settings[:shell].should == "bash"
     end
   end
 end

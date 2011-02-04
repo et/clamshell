@@ -45,7 +45,7 @@ module Clamshell
       end
 
       def raise_error(msg)
-        raise GitError, "Git repsitory #{name} #{msg}"
+        raise GitError, "Git repository #{name} #{msg}"
       end
   end
 end

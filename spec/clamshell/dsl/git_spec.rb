@@ -1,108 +1,116 @@
 require 'spec_helper'
 require 'git_helper'
 
+shared_examples_for "Git" do
+  it "should have a name" do
+    @git.should respond_to(:name)
+  end
+end
+
+shared_examples_for "Good Git" do
+  it_should_behave_like "Git"
+  specify { @git.send(:valid?).should be_true }
+
+  describe "validate" do
+    it "should not raise an error" do
+      expect { @git.validate}.to_not raise_error
+    end
+  end
+end
+
+shared_examples_for "Bad Git" do
+  it_should_behave_like "Git"
+  specify { @git.send(:valid?).should be_false }
+
+  describe "validate" do
+    it "should raise an error" do
+      expect { @git.validate}.to raise_error(Clamshell::GitError, /is not up to date/)
+    end
+  end
+end
+
+
 describe Clamshell::Git do
 
-  CLAMSHELL_DIR = "/tmp/clamshell"
-  REPO_NAME     = "repo"
-
-  describe "basic validation tests" do
-    before :all do
-      @repo_dir = File.join(CLAMSHELL_DIR, REPO_NAME)
-
-      repo = create_repo(@repo_dir)
-
-      second_sha = create_commit(repo, @repo_dir, "fileA")
-      latest_sha = create_commit(repo, @repo_dir, "fileB")
-
-      @good_rev = Clamshell::Git.new(@repo_dir, :rev => latest_sha)
-      @old_rev  = Clamshell::Git.new(@repo_dir, :rev => second_sha)
+  REPO_DIR = "/tmp/clamshell"
 
 
-      create_tag(@repo_dir, "Good", latest_sha)
-      @tag  = Clamshell::Git.new(@repo_dir, :tag => "Good")
+  before :each do
+    repo = create_repo(REPO_DIR)
 
-      create_branch(@repo_dir, "FooBranch", latest_sha)
-      @branch  = Clamshell::Git.new(@repo_dir, :branch => "FooBranch", :rev => latest_sha)
+    @second_sha = create_commit(repo, REPO_DIR, "fileA")
+    @latest_sha = create_commit(repo, REPO_DIR, "fileB")
+  end
+
+  after :each do
+    FileUtils.rm_rf REPO_DIR
+  end
+
+  describe "rev" do
+    context "up to date" do
+      before :each do
+        @git = Clamshell::Git.new(REPO_DIR, :rev => @latest_sha)
+      end
+      it_should_behave_like "Good Git"
     end
 
-    after :all do
-      FileUtils.rm_rf CLAMSHELL_DIR
+    context "old" do
+      before :each do
+        @git = Clamshell::Git.new(REPO_DIR, :rev => @second_sha)
+      end
+      it_should_behave_like "Bad Git"
+    end
+  end
+
+  describe "tag" do
+    before :each do
+      create_tag(REPO_DIR, "Good", @latest_sha)
+      @git = Clamshell::Git.new(REPO_DIR, :tag => "Good")
+    end
+    it_should_behave_like "Good Git"
+  end
+
+  describe "branch" do
+    before :each do
+      create_branch(REPO_DIR, "FooBranch", @latest_sha)
+      @git = Clamshell::Git.new(REPO_DIR, :branch => "FooBranch", :rev => @latest_sha)
     end
 
-    it "should return the repository's name" do
-      @good_rev.name.should == REPO_NAME
+    context "wrong branch" do # currently on master
+      it_should_behave_like "Bad Git"
     end
 
-    describe "init" do
-      it "should raise an error no tag or revision" do
-        lambda { Clamshell::Git.new(@repo_dir)}.should raise_error(Clamshell::GitError, /must have a :rev or :tag specified/)
+    context "correct branch" do
+      before :each do
+        checkout_branch(REPO_DIR, "FooBranch")
       end
+      it_should_behave_like "Good Git"
+    end
+  end
 
-      it "should raise an error for a bad branch" do
-        lambda { Clamshell::Git.new(@repo_dir, :branch => "Unknown")}.should raise_error(Clamshell::GitError, /does not have a branch named Unknown/)
-      end
+  describe "ignored" do
+    before :each do
+      @git = Clamshell::Git.new("/ignored", :rev => "123abc", :ignored => true)
+    end
+    it_should_behave_like "Good Git"
+  end
 
-      it "should raise an error for a bad revision" do
-        lambda { Clamshell::Git.new(@repo_dir, :rev => "123abc")}.should raise_error(Clamshell::GitError, /does not have a revision/)
-      end
 
-      it "should raise an error for a bad tag" do
-        lambda { Clamshell::Git.new(@repo_dir, :tag => "Bad")}.should raise_error(Clamshell::GitError, /does not have a tag named/)
-      end
+  context "invalid initializers" do
+    it "should raise an error no tag or revision" do
+      expect { capture(:stdout) {Clamshell::Git.new(REPO_DIR)}}.to raise_error(Clamshell::GitError, /must have a :rev or :tag specified/)
     end
 
-    describe "valid?" do
-      context "rev" do
-        it { @good_rev.send(:valid?).should be_true }
-        it { @old_rev.send(:valid?).should be_false }
-      end
-
-      context "tag" do
-        it { @tag.send(:valid?).should be_true }
-      end
-
-      context "branch" do
-        it { @branch.send(:valid?).should be_false } # currently on master branch
-
-        it "should adjust the branch" do
-          checkout_branch(@repo_dir, "FooBranch")
-          @branch.send(:valid?).should be_true  # currently on FooBranch branch
-          checkout_branch(@repo_dir, "master")
-        end
-      end
+    it "should raise an error for a bad branch" do
+      expect { Clamshell::Git.new(REPO_DIR, :branch => "Unknown")}.to raise_error(Clamshell::GitError, /does not have a branch named Unknown/)
     end
 
+    it "should raise an error for a bad revision" do
+      expect { Clamshell::Git.new(REPO_DIR, :rev => "123abc")}.to raise_error(Clamshell::GitError, /does not have a revision/)
+    end
 
-    describe "validate" do
-      context "ref" do
-        it "should not raise an error" do
-          lambda { @good_rev.validate}.should_not raise_error
-        end
-
-        it "should raise an error" do
-          lambda { @old_rev.validate}.should raise_error(Clamshell::GitError, /is not up to date/)
-        end
-      end
-
-      context "tag" do
-        it "should not raise an error" do
-          lambda { @tag.validate}.should_not raise_error
-        end
-      end
-
-      context "branch" do
-        #currently on master branch
-        it "should raise an error" do
-          lambda { @branch.validate}.should raise_error(Clamshell::GitError, /is not up to date/)
-        end
-
-        it "should adjust the branch and not raise an error" do
-          checkout_branch(@repo_dir, "FooBranch")
-          lambda { @branch.validate}.should_not raise_error
-          checkout_branch(@repo_dir, "master")
-        end
-      end
+    it "should raise an error for a bad tag" do
+      expect { Clamshell::Git.new(REPO_DIR, :tag => "Bad")}.to raise_error(Clamshell::GitError, /does not have a tag named/)
     end
   end
 end

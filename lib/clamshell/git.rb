@@ -6,6 +6,10 @@ module Clamshell
   class Git
     def initialize(uri, opts = {})
       @uri    = File.expand_path(uri)
+
+      @ignored = opts[:ignored]
+      return if @ignored
+
       @repo   = Grit::Repo.new(@uri)
       @branch = opts[:branch] || "master"
 
@@ -37,14 +41,16 @@ module Clamshell
     end
 
     def validate
-      unless valid?
+      if valid?
+        Clamshell.ui.success "Git repository #{name} is up to date"
+      else
         raise_error "is not up to date."
       end
     end
 
     private
       def valid?
-        valid_head? && valid_ref?
+        (@ignored) || valid_head? && valid_ref?
       end
 
       def valid_head?

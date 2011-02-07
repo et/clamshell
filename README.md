@@ -87,6 +87,8 @@ Valid options include `:rev => SHA_ID` and `:tag => TAG`.
 The `master` branch is implied to be the `HEAD`, but you can use the `:branch => BRANCH`
 option to specify otherwise.
 
+Additionally, you can use a `:ignored => true` option to skip validation for this dependency.
+
 You can check a dependencies file:
 
     clamshell check Dependencies.list

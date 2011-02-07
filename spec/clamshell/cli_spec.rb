@@ -40,7 +40,7 @@ describe Clamshell::CLI do
       end
 
       it "#--disable, raises a safe system exit error" do
-        lambda { capture(:stdout){ Clamshell::CLI.start(["--disable"])}}.should raise_error SystemExit
+        expect { capture(:stdout){ Clamshell::CLI.start(["--disable"])}}.to raise_error SystemExit
       end
     end
   end
@@ -51,9 +51,7 @@ describe Clamshell::CLI do
     end
 
     it "should attempt to check a dependencies file" do
-      lambda do
-        capture(:stdout){ Clamshell::CLI.start(["check", "#{FIXTURES_DIR}/Dependencies.list"])}
-      end.should_not raise_error
+      expect { capture(:stdout){ Clamshell::CLI.start(["check", "#{FIXTURES_DIR}/Dependencies.list"])}}.to_not raise_error
     end
   end
 
@@ -83,7 +81,5 @@ describe Clamshell::CLI do
 end
 
 def test_missing_file(argv)
-  lambda do
-    capture(:stderr){ Clamshell::CLI.start(argv)}
-  end.should raise_error(SystemExit, /File: \S*, not found/)
+  expect { capture(:stderr){ Clamshell::CLI.start(argv)}}.to raise_error(SystemExit, /File: \S*, not found/)
 end

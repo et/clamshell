@@ -4,9 +4,7 @@ describe Clamshell::Environment do
 
   describe "setup" do
     it "should raise an error when no shell is given" do
-      lambda do
-        Clamshell::Environment.setup( & proc{})
-      end.should raise_error(RuntimeError, /No shell specified/)
+      expect { Clamshell::Environment.setup( & proc{})}.to raise_error(RuntimeError, /No shell specified/)
     end
 
     it "should return an Environment object" do
@@ -32,9 +30,7 @@ describe Clamshell::Environment do
     end
 
     it "should raise an error on an unknown shell" do
-      lambda do
-        Clamshell::Environment.new("sea")
-      end.should raise_error(RuntimeError, /Unsupported shell/)
+      expect { Clamshell::Environment.new("sea")}.to raise_error(RuntimeError, /Unsupported shell/)
     end
   end
 
@@ -95,9 +91,7 @@ describe Clamshell::Environment do
 
       describe "delimiter" do
         it "should raise an error when prepend/append not defined" do
-          lambda do
-            @bash.env_var("FOO", :delimiter => ":")
-          end.should raise_error(Clamshell::DslError, /Must specify prepend or append/)
+          expect { @bash.env_var("FOO", :delimiter => ":")}.to raise_error(Clamshell::DslError, /Must specify prepend or append/)
         end
 
         it "should use a delimiter to append a variable" do

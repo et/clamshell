@@ -1,82 +1,87 @@
 require 'spec_helper'
 require 'thor'
 
-# @todo - This test has too much duplication, clean this up.
+CLEAR  = "\e[0m"
+RED    = "\e[31m"
+GREEN  = "\e[32m"
+YELLOW = "\e[33m"
+BLUE   = "\e[34m"
+
+TEXT   = "foobar"
+
+shared_examples_for "printed text" do |type, color = nil|
+  it "should print the text in #{color}" do
+    if color
+      capture(:stdout){ @ui.send type, TEXT}.should == color + TEXT + CLEAR + "\n"
+    else
+      capture(:stdout){ @ui.send type, TEXT}.should == TEXT + "\n"
+    end
+  end
+end
+
+shared_examples_for "unprinted text" do |type|
+  it "should not print the text" do
+    capture(:stdout){ @ui.send type, TEXT}.should be_empty
+  end
+end
 
 describe Clamshell::UI do
 
-  # @todo - These are all defined in Thor::Shell::Color.
-  #         For some reason, I couldn't use them though, not sure why.
-  CLEAR  = "\e[0m"
-  RED    = "\e[31m"
-  GREEN  = "\e[32m"
-  YELLOW = "\e[33m"
-  BLUE   = "\e[34m"
-
   before :all do
     @ui = Clamshell::UI.new(Thor::Shell::Color.new)
-    @text = "foobar"
   end
 
   describe "debug" do
-    it "should not print debug text" do
-      capture(:stdout){ @ui.debug(@text)}.should == ""
+    context "off" do
+      it_should_behave_like "unprinted text", :debug
     end
+    context "on" do
+      before do
+        @ui.debug!
+      end
+      it_should_behave_like "printed text", :debug
+    end
+  end
 
-    it "should print debug text when enabled" do
-      @ui.debug!
-      capture(:stdout){ @ui.debug(@text)}.should == @text + "\n"
-    end
+  context "info" do
+    it_should_behave_like "printed text", :info
+  end
 
-    it "should print blue info text" do
-      capture(:stdout) do
-        @ui.info(@text)
-      end.should == @text + "\n"
-    end
+  context "warn" do
+    it_should_behave_like "printed text", :warn, YELLOW
+  end
 
-    it "should print yellow warning text" do
-      capture(:stdout) do
-        @ui.warn(@text)
-      end.should == YELLOW + @text + CLEAR + "\n"
-    end
+  context "error" do
+    it_should_behave_like "printed text", :error, RED
+  end
 
-    it "should print red error text" do
-      capture(:stdout) do
-        @ui.error(@text)
-      end.should == RED + @text + CLEAR + "\n"
-    end
-
-    it "should print green success text" do
-      capture(:stdout) do
-        @ui.success(@text)
-      end.should == GREEN + @text + CLEAR + "\n"
-    end
+  context "success" do
+    it_should_behave_like "printed text", :success, GREEN
   end
 end
 
 describe Clamshell::SilentUI do
   before :all do
     @ui = Clamshell::SilentUI.new
-    @text = "foobar"
   end
 
-  it "should not print any debug text" do
-    capture(:stdout){ @ui.debug(@text)}.should == ""
+  context "debug" do
+    it_should_behave_like "unprinted text", :debug
   end
 
-  it "should not print any info text" do
-    capture(:stdout){ @ui.info(@text)}.should == ""
+  context "info" do
+    it_should_behave_like "unprinted text", :info
   end
 
-  it "should not print any warn text" do
-    capture(:stdout){ @ui.warn(@text)}.should == ""
+  context "warn" do
+    it_should_behave_like "unprinted text", :warn
   end
 
-  it "should not print any error text" do
-    capture(:stdout){ @ui.error(@text)}.should == ""
+  context "error" do
+    it_should_behave_like "unprinted text", :error
   end
 
-  it "should not print any success text" do
-    capture(:stdout){ @ui.success(@text)}.should == ""
+  context "success" do
+    it_should_behave_like "unprinted text", :success
   end
 end

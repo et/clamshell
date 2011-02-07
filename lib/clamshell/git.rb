@@ -40,11 +40,15 @@ module Clamshell
       File.basename(@uri)
     end
 
-    def validate
-      if valid?
-        Clamshell.ui.success "Git repository #{name} is up to date"
-      else
+    def to_s
+      unless valid?
         raise_error "is not up to date."
+      end
+
+      if @ignored
+        ""
+      else
+        "Git repository #{name} is up to date"
       end
     end
 

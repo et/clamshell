@@ -13,7 +13,7 @@ shared_examples_for "Good Git" do
 
   describe "validate" do
     it "should not raise an error" do
-      expect { @git.validate}.to_not raise_error
+      expect { @git.inspect}.to_not raise_error
     end
   end
 end
@@ -24,7 +24,7 @@ shared_examples_for "Bad Git" do
 
   describe "validate" do
     it "should raise an error" do
-      expect { @git.validate}.to raise_error(Clamshell::GitError, /is not up to date/)
+      expect { @git.inspect}.to raise_error(Clamshell::GitError, /is not up to date/)
     end
   end
 end

@@ -16,7 +16,7 @@ module Clamshell
     end
 
     def to_s
-      @dependencies.each { |d| d.validate }
+      @dependencies.each { |d| d.inspect }.join("\n")
     end
   end
 end

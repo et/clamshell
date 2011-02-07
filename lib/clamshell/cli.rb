@@ -24,7 +24,7 @@ module Clamshell
     desc "check FILE", "Validates a dependency file"
     def check(file)
       check_file(file)
-      Clamshell.ui.info Dsl.build(file)
+      Clamshell.ui.success Dsl.build(file)
     end
 
     desc "convert FILE", "Converts an environment file to shell statements"

@@ -23,4 +23,13 @@ describe Clamshell::Dependencies do
       FileUtils.rm_rf("/tmp/repo")
     end
   end
+
+  describe "to_s" do
+    it "should print the dependencies joined by a newline" do
+      d = Clamshell::Dependencies.new
+      d.git("/tmp/repoa", :ignored => true)
+      d.git("/tmp/repob", :ignored => true)
+      d.inspect.should =~ /.*\n.*/
+    end
+  end
 end

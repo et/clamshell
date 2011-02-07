@@ -8,25 +8,25 @@ describe Clamshell::Environment do
     end
 
     it "should return an Environment object" do
-      Clamshell::Environment.setup("bash", & proc{}).class.should == Clamshell::Environment
+      Clamshell::Environment.setup("bash", & proc{}).should be_an_instance_of Clamshell::Environment
     end
   end
 
   describe "shell initializer" do
     it "should set up a tcsh shell" do
-      Clamshell::Environment.new("tcsh").shell.should == Clamshell::TcshAdapter
+      Clamshell::Environment.new("tcsh").shell.should be Clamshell::TcshAdapter
     end
 
     it "should set up a csh(tcsh) shell" do
-      Clamshell::Environment.new("csh").shell.should == Clamshell::TcshAdapter
+      Clamshell::Environment.new("csh").shell.should be Clamshell::TcshAdapter
     end
 
     it "should set up a bash shell" do
-      Clamshell::Environment.new("bash").shell.should == Clamshell::BashAdapter
+      Clamshell::Environment.new("bash").shell.should be Clamshell::BashAdapter
     end
 
     it "should set up a zsh(bash) shell" do
-      Clamshell::Environment.new("zsh").shell.should == Clamshell::BashAdapter
+      Clamshell::Environment.new("zsh").shell.should be Clamshell::BashAdapter
     end
 
     it "should raise an error on an unknown shell" do

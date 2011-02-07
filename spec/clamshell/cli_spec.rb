@@ -21,14 +21,14 @@ describe Clamshell::CLI do
           capture(:stdout) do
             Clamshell::CLI.start
           end
-          Clamshell.ui.instance_variable_get(:@shell).class.should == Thor::Shell::Color
+          Clamshell.ui.instance_variable_get(:@shell).should be_an_instance_of Thor::Shell::Color
         end
 
         it "should give a basic ui for --no_color" do
           capture(:stdout) do
             Clamshell::CLI.start(["--no-color"])
           end
-          Clamshell.ui.instance_variable_get(:@shell).class.should == Thor::Shell::Basic
+          Clamshell.ui.instance_variable_get(:@shell).should be_a Thor::Shell::Basic
         end
       end
 

@@ -5,7 +5,7 @@ describe Clamshell::Dependencies do
 
   describe "validate" do
     it "should return a Dependencies object" do
-      Clamshell::Dependencies.validate(& proc{}).class.should == Clamshell::Dependencies
+      Clamshell::Dependencies.validate(& proc{}).should be_a Clamshell::Dependencies
     end
   end
 
@@ -17,7 +17,7 @@ describe Clamshell::Dependencies do
       d = Clamshell::Dependencies.new
       d.git("/tmp/repo", :rev => sha)
       d.instance_variable_get(:@dependencies).one? do |d|
-        d.class == Clamshell::Git
+        d.should be_an_instance_of Clamshell::Git
       end.should be_true
 
       FileUtils.rm_rf("/tmp/repo")

@@ -1,18 +1,7 @@
-A work in progress, adding a [README](http://tom.preston-werner.com/2010/08/23/readme-driven-development.html).
-
 # Clamshell
 
-Inspired by [bundler](http://gembundler.com), clamshell is a tool that manages
-project dependencies. However, there are some differences:
-
-* Bundler works for only ruby projects, clamshell works for all projects
-  reguardless of the language.
-* Bundler checks to see if the correct depedencies (gems) are installed. If
-  not, then it installs it for the user. Clamshell only does the former.
-
-Additionally, clamshell has functionality to prepare environment settings (such
-as setting aliases, environment variables, etc.) that works reguardless of the
-user's running shell (bash, tcsh).
+Clamshell is a tool that validates your project's dependencies in
+a cross-shell compatible environment.
 
 ## Requirements
 
@@ -30,45 +19,43 @@ Install the required gems using `bundler`.
 
     bundle install
 
-## Setting up a project dependency file
+## Clamshell files
 
-In your project root directory, set up a file called `Dependencies.list`:
+Clamshell takes two types of files:
 
-    Project.configure "MyProject" {
-      git "/path/to/git/repo", :ref => "12345SHAID"
-    }
+* An environment file that contains a list of shell specific statements that should be `source`d for your project.
+* A dependencies file that contains a list of dependencies required for your project.
 
-In plain English, this says: "The project, `MyProject` has one dependency to a git
-repository located at `/path/to/git/repo` whose `HEAD` must be pointing to `12345SHAID`".
-This assumes that the directory contains a `.git` directory.
+Both of these files may have ruby code embedded in them.
 
-###  Environment section
+##  Environment file
 
-Sometimes your project has a dependency that is shell specific. You can set it
-up as follows:
+Sometimes your project has a dependency that is shell specific (environment variables,
+aliases). Setup a `Shell.env` file in your project root with the following:
 
-    Project.configure ("MyProject") {
-      environment("bash") {
-        env_var "DISTCC_HOSTS" "localhost red green blue"
+    Environment.setup ("bash") do
+      env_var "DISTCC_HOSTS" "localhost red green blue"
+      env_var "PATH", :prepend => "~/bin",    :delimiter => ":"
+      env_var "PATH", :append  => "/usr/bin", :delimiter => ":"
+      alias editor "vim"
+    end
 
-        env_var "PATH", :prepend => "~/bin",    :delimiter => ":"
-        env_var "PATH", :append  => "/usr/bin", :delimiter => ":"
+You can convert these statements to bash statements as follows:
 
-        alias editor "vim"
-      }
-    }
+    clamshell convert SHELL.env
 
-When run, this will print the following to standard out.
+which will print the following to standard out (or to a file using the `--shell-out=FILE` flag).
 
-    export DISTCC_HOSTS='localhost red green blue'
+    export DISTCC_HOSTS="localhost red green blue"
     export PATH=~/bin:$PATH
     export PATH=$PATH:/usr/bin
-    alias editor='vim'
+    alias editor="vim"
 
-You also do not have specify a shell:
+### Shell independence
 
-    environment do
-      ...
+Your environment file doesn't even need to specify a shell:
+
+    Environment.setup do
       ...
     end
 
@@ -83,51 +70,56 @@ Currently, the shells supported are tcsh and bash. However, I am assuming that
 csh and zsh are supported as well since they are closely related to tcsh and
 bash, respectively. Hence, aliases are set up for their respective shells.
 
-What is most important to remember is that while this may seem like it's limiting
-the amount of shell statements you have at your disposal, it's quite the contrary.
-Since this is a ruby application, you now have a high level language to do your
-shell scripting.
 
-Refer to the spec fixtures for a full
-[example](http://github.com/et/clamshell/blob/master/spec/fixtures/Dependencies.list)
-of `Dependencies.list`.
+## Dependencies file
+
+In your project root directory, set up a file called `Dependencies.list`:
+
+    Dependencies.validate do
+      git "/path/to/git/repoA", :rev => "12345SHAID"
+    end
+
+In plain English, this says: "This project has one dependency to a git
+repository located at `/path/to/git/repo` whose `HEAD` must be pointing to `12345SHAID`".
+This assumes that the directory contains a `.git` directory.
+
+Valid options include `:rev => SHA_ID` and `:tag => TAG`.
+The `master` branch is implied to be the `HEAD`, but you can use the `:branch => BRANCH`
+option to specify otherwise.
+
+Additionally, you can use a `:ignored => true` option to skip validation for this dependency.
+
+You can check a dependencies file:
+
+    clamshell check Dependencies.list
+
+which will validate whether or not the listed dependencies are up to date.
+
+Refer to the spec's fixtures for an [example](https://github.com/et/clamshell/blob/master/spec/fixtures/Dependencies.list).
 
 
-## Usage
-
-Run `clamshell` over your `Dependencies.list` file you've just created.
-
-    % clamshell check Dependencies.list
-
-It any dependencies are out of date, they will be listed in red.
-
-### Options
-
-#### Boolean options
+## Global options
 
 * `--no-color`       - Disables color
 * `--disable`        - Disables clamshell from running (useful if you use clamshell in some kind of continuous integration)
 * `--verbose`        - Prints debugging information.
-* `--git_auto_reset` - Attempts to `git reset` each of the git repositories to the requested revision. (FIXME)
-* `--git_auto_pull`  - Attempts to `git pull` each of the git repositories' origins. (FIXME)
 
-#### String options
+## Best practices
 
-* `--shell=SHELLNAME` - The environment section will generate shell statements for `SHELLNAME`. This is required if a shell name is not specified in your environment section.
-* `--shell_out=SHELL_OUT.txt` - Pipe the generated shell statements to a file. (FIXME)
+To use clamshell effectively, it's best to first convert your environment file
+to your all the required shells using it.
 
-#### Settings
+    clamshell convert Shell.env --shell-out=Shell.bash
+    clamshell convert Shell.env --shell-out=Shell.tcsh
 
-All of the above options can be localized to a settings file. To do so, set
-up a file called `settings.yml` and invoke `clamshell` as follows.
+Then set up a file called `Project.clamshell` in your project root directory
+that contains the following:
 
-     % clamshell check Dependencies.list --settings=/path/to/settings.yml
+    source Shell.`ps -p $$ | awk 'NR==2 {print $4}'`
+    clamshell check Dependencies.list
 
-Any flags used on the command line will override what is in `settings.yml` file.
-Refer to the spec fixtures for a full
-[example](http://github.com/et/clamshell/blob/master/spec/fixtures/settings.yml)
-of `settings.yml`.
-
+and call it with `source Project.clamshell`. This will source the correct shell
+statements then check the dependencies.
 
 ## Todo
 
@@ -137,3 +129,4 @@ of `settings.yml`.
 * Check if apps exist in user's PATH.
 * Throw error status code if a dependency is not fulfilled.
 * shell_out flag implementation.
+* Make clamopts file.

@@ -3,42 +3,47 @@ require 'thor'
 module Clamshell
   class CLI < Thor
 
-    Settings::BOOL_DEFAULT_OPTIONS.each_key do |key|
-      class_option key, :type => :boolean, :banner => Settings::BOOL_DEFAULT_BANNERS[key]
-    end
-
-    Settings::STRING_DEFAULT_OPTIONS.each_key do |key|
-      class_option key, :type => :string, :banner => Settings::STRING_DEFAULT_BANNERS[key]
-    end
-
-    class_option :settings, :type => :string,  :banner => "File with settings overrides"
-
+    class_option :no_color, :type => :boolean, :banner => "Disable color"
+    class_option :verbose,  :type => :boolean, :banner => "More verbose output"
+    class_option :disable,  :type => :boolean, :banner => "Disable clamshell"
     def initialize(*)
       super
 
-      shell = (options["no_color"] ? Thor::Shell::Basic.new : Thor::Shell::Color.new)
-      Clamshell.ui = UI.new(shell)
-      Clamshell.ui.debug! if options["verbose"]
+      ui = (options.no_color? ? Thor::Shell::Basic.new : Thor::Shell::Color.new)
+      Clamshell.ui = UI.new(ui)
+      Clamshell.ui.debug! if options.verbose?
 
-      if options["disable"]
-        raise SafeExit, "Skipping dependency checks, you're on your own!"
+      if options.disable?
+        Clamshell.ui.warn "Disabling clamshell."
+        exit
       end
 
-      if options["settings"]
-        settings_file = options["settings"]
-        raise "Settings file: #{settings_file}, not found." unless File.exist?(settings_file)
-      end
-      Clamshell.settings = Settings.new(options["settings"])
+      Clamshell.settings = options
     end
 
     desc "check FILE", "Validates a dependency file"
     def check(file)
-      raise "File: #{file}, not found" unless File.exist?(file)
-
-      #Clamshell.ui.info  "Validating dependencies."
-      Clamshell.ui.debug Clamshell.settings
-
-      Clamshell.ui.info Dsl.build(file)
+      check_file(file)
+      Clamshell.ui.success Dsl.build(file)
     end
+
+    desc "convert FILE", "Converts an environment file to shell statements"
+    method_option :shell,     :type => :string, :banner => "Shell to create statements for"
+    method_option :shell_out, :type => :string, :banner => "File to output to"
+    def convert(file)
+      check_file(file)
+
+      file_out = Clamshell.settings[:shell_out]
+      if file_out
+        File.open(file_out, "w") {|f| f.write(Dsl.build(file)) }
+      else
+        Clamshell.ui.info Dsl.build(file)
+      end
+    end
+
+    private
+      def check_file(file)
+        abort("File: #{file}, not found.") unless File.exist?(file)
+      end
   end
 end

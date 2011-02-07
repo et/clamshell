@@ -1,27 +1,19 @@
-Project.configure "MyProject" do
-
-  # Checks for a git repository located at /tmp/git_repo
-  # whose HEAD points to a revision 182ed...
-  #git "/tmp/git_repo", :ref => "182ed49c5fb4c42a63a18009ef2dbb87adb7044f"
-
-
-  ######################################
-  # The following will return:
-  # export DISTCC_HOSTS="localhost red green blue"
-  # export PATH="/usr/bin"
-  # export PATH="~/usr/bin:${PATH}"
-  # export PATH="~alice/bin:${PATH}"
-  # export PATH="~bob/bin:${PATH}"
-  # export PATH="~eve/bin:${PATH}"
+Dependencies.validate do
+  # Checks for three git repositories:
   #
-  environment("bash") do
-    env_var "DISTCC_HOSTS", "localhost red green blue"
+  # First is located at /tmp/repoA
+  # who is on the master branch and its HEAD points to a revision 182ed...
+  #
+  # Second is located at /tmp/repoB
+  # who is on the master branch and its HEAD points to a tag TAG
+  #
+  # Third is located at /tmp/repoC
+  # who is on the slave branch and its HEAD points to a revision 3241a...
+  #
+  # Fourth is listed but is ignored.
 
-    env_var "PATH", "/usr/bin"
-    env_var "PATH", :prepend => "~/usr/bin", :delimiter => ":"
-
-    ["~alice/bin", "~bob/bin", "~eve/bin"].each do |p|
-      env_var "PATH", :prepend => p, :delimiter => ":"
-    end
-  end
+  #git "/tmp/repoA", :rev => "182ed49c5fb4c42a63a18009ef2dbb87adb7044f"
+  #git "/tmp/repoB", :tag => "TAG"
+  #git "/tmp/repoC", :branch => "slave", :rev => "3241ab4c42a63a18009ef2dbb87adb7044f"
+  #git "/tmp/repoC", :rev => "3241ab4c42a63a18009ef2dbb87adb7044f", :ignored => true
 end

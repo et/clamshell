@@ -2,47 +2,35 @@ require 'spec_helper'
 
 describe Clamshell::Environment do
 
+  describe "setup" do
+    it "should raise an error when no shell is given" do
+      expect { Clamshell::Environment.setup( & proc{})}.to raise_error(RuntimeError, /No shell specified/)
+    end
+
+    it "should return an Environment object" do
+      Clamshell::Environment.setup("bash", & proc{}).should be_an_instance_of Clamshell::Environment
+    end
+  end
+
   describe "shell initializer" do
     it "should set up a tcsh shell" do
-      Clamshell::Environment.new("tcsh").shell.should == Clamshell::TcshAdapter
+      Clamshell::Environment.new("tcsh").shell.should be Clamshell::TcshAdapter
     end
 
     it "should set up a csh(tcsh) shell" do
-      Clamshell::Environment.new("csh").shell.should == Clamshell::TcshAdapter
+      Clamshell::Environment.new("csh").shell.should be Clamshell::TcshAdapter
     end
 
     it "should set up a bash shell" do
-      Clamshell::Environment.new("bash").shell.should == Clamshell::BashAdapter
+      Clamshell::Environment.new("bash").shell.should be Clamshell::BashAdapter
     end
 
     it "should set up a zsh(bash) shell" do
-      Clamshell::Environment.new("zsh").shell.should == Clamshell::BashAdapter
+      Clamshell::Environment.new("zsh").shell.should be Clamshell::BashAdapter
     end
 
     it "should raise an error on an unknown shell" do
-      lambda do
-        Clamshell::Environment.new("sea")
-      end.should raise_error(RuntimeError, /Unsupported shell/)
-    end
-
-    describe "shell option" do
-      it "should raise an error when no shell option is given" do
-        lambda do
-          Clamshell::Environment.new
-        end.should raise_error(RuntimeError, /No shell specified/)
-      end
-
-      it "should set the shell to the one given on the command line" do
-        Clamshell.settings[:shell] = "bash"
-        Clamshell::Environment.new.shell.should == Clamshell::BashAdapter
-        Clamshell.settings[:shell] = nil
-      end
-
-      it "should override the shell given as the initialize" do
-        Clamshell.settings[:shell] = "tcsh"
-        Clamshell::Environment.new("bash").shell.should == Clamshell::TcshAdapter
-        Clamshell.settings[:shell] = nil
-      end
+      expect { Clamshell::Environment.new("sea")}.to raise_error(RuntimeError, /Unsupported shell/)
     end
   end
 
@@ -103,9 +91,7 @@ describe Clamshell::Environment do
 
       describe "delimiter" do
         it "should raise an error when prepend/append not defined" do
-          lambda do
-            @bash.env_var("FOO", :delimiter => ":")
-          end.should raise_error(Clamshell::DslError, /Must specify prepend or append/)
+          expect { @bash.env_var("FOO", :delimiter => ":")}.to raise_error(Clamshell::DslError, /Must specify prepend or append/)
         end
 
         it "should use a delimiter to append a variable" do
@@ -114,5 +100,18 @@ describe Clamshell::Environment do
         end
       end
     end
+  end
+
+  describe "to_s" do
+    block = proc {
+      env_var "FOO", "BAR"
+      env_var "BAZ", "BUZZ"
+    }
+
+    out = <<-O.gsub(/^\s+/, "").chop
+    export FOO="BAR"
+    export BAZ="BUZZ"
+    O
+    Clamshell::Environment.setup("bash", &block).inspect.should == out
   end
 end

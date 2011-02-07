@@ -5,30 +5,33 @@ require 'clamshell/cli'
 
 describe Clamshell::CLI do
 
+  after :each do
+    Clamshell.settings = {}
+  end
+
   it "shows the help listing with no args" do
     capture(:stdout){ Clamshell::CLI.start }.should =~ /Tasks:/
   end
 
   describe "#initialize" do
 
-    describe "shell" do
-
-      it "should by default give a color shell" do
-        capture(:stdout) do
-          Clamshell::CLI.start
+    context "options" do
+      describe "color" do
+        it "should by default give a color ui" do
+          capture(:stdout) do
+            Clamshell::CLI.start
+          end
+          Clamshell.ui.instance_variable_get(:@shell).should be_an_instance_of Thor::Shell::Color
         end
-        Clamshell.ui.instance_variable_get(:@shell).class.should == Thor::Shell::Color
+
+        it "should give a basic ui for --no_color" do
+          capture(:stdout) do
+            Clamshell::CLI.start(["--no-color"])
+          end
+          Clamshell.ui.instance_variable_get(:@shell).should be_a Thor::Shell::Basic
+        end
       end
 
-      it "should give a basic shell for --no_color" do
-        capture(:stdout) do
-          Clamshell::CLI.start(["--no_color"])
-        end
-        Clamshell.ui.instance_variable_get(:@shell).class.should == Thor::Shell::Basic
-      end
-    end
-
-    describe "options" do
       it "#--verbose, should turn on debug statements" do
         capture(:stdout) do
           Clamshell::CLI.start(["--verbose"])
@@ -37,38 +40,46 @@ describe Clamshell::CLI do
       end
 
       it "#--disable, raises a safe system exit error" do
-        lambda do
-          capture(:stdout){ Clamshell::CLI.start(["--disable"])}
-        end.should raise_error(Clamshell::SafeExit, /Skipping dependency checks, you're on your own!/)
-      end
-
-      it "#--settings, raises an error on a missing file" do
-        lambda do
-          capture(:stdout){ Clamshell::CLI.start(["--settings=missing_file"])}
-        end.should raise_error(StandardError, /Settings file: missing_file, not found/)
+        expect { capture(:stdout){ Clamshell::CLI.start(["--disable"])}}.to raise_error SystemExit
       end
     end
   end
 
   describe "#check" do
-    it "shows an error for no file given" do
-      capture(:stderr){ Clamshell::CLI.start(["check"])}.should =~ /"check" was called incorrectly/
-    end
-
     it "shows an error for a file not found" do
-      lambda { Clamshell::CLI.start(["check", "missing_file"])}.should raise_error(StandardError, /File: missing_file, not found/)
+      test_missing_file(["check", "missing_file"])
     end
 
-    it "shows an info statements about to read a file" do
-      file = Tempfile.new('empty_file')
-      begin
-        capture(:stdout) do
-          Clamshell::CLI.start(["check", file])
-        end.should =~ /Validating dependencies/
-      ensure
-        file.close
-        file.unlink
+    it "should attempt to check a dependencies file" do
+      expect { capture(:stdout){ Clamshell::CLI.start(["check", "#{FIXTURES_DIR}/Dependencies.list"])}}.to_not raise_error
+    end
+  end
+
+  describe "#convert" do
+    it "shows an error for a file not found" do
+      test_missing_file(["convert", "missing_file"])
+    end
+
+    it "#--shell, it should set a shell option" do
+      capture(:stdout){ Clamshell::CLI.start(["convert", "#{FIXTURES_DIR}/Shell.env", "--shell=bash"])}
+      Clamshell.settings[:shell].should == "bash"
+    end
+
+    context "output" do
+      it "should print to standard out" do
+        capture(:stdout){ Clamshell::CLI.start(["convert", "#{FIXTURES_DIR}/Shell.env"])}.should_not be_empty
+      end
+
+      it "#--shell-out, should output to a file" do
+        file = mock('file')
+        File.should_receive(:open).with("filename", "w").and_yield(file)
+        file.should_receive(:write)
+        Clamshell::CLI.start(["convert", "#{FIXTURES_DIR}/Shell.env", "--shell-out=filename"])
       end
     end
   end
+end
+
+def test_missing_file(argv)
+  expect { capture(:stderr){ Clamshell::CLI.start(argv)}}.to raise_error(SystemExit, /File: \S*, not found/)
 end

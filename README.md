@@ -74,17 +74,11 @@ bash, respectively. Hence, aliases are set up for their respective shells.
 
 You can also call generic shell statements that are valid in all shells:
 
-    echo -n "FOO"
-
-A `method_missing` method is defined which works as a catch-all. This means
-however, that your call must be ruby-esque, so the above statement must
-be written as:
-
-    echo "-n", "FOO"
-
-which will output
-
     echo -n FOO
+
+But you must be verbose that you are doing so:
+
+    cmd "echo -n FOO"
 
 ## Dependencies file
 

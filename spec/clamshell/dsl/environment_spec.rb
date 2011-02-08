@@ -103,7 +103,7 @@ describe Clamshell::Environment do
 
     describe "generic statement" do
       it "should print out what it receives" do
-        @bash.send :echo, "blah"
+        @bash.cmd "echo blah"
         @bash.inspect.should == %q{echo blah}
       end
     end
@@ -127,7 +127,7 @@ describe Clamshell::Environment do
     it "should convert a block with generic statements" do
       block = proc {
         env_var "FOO", "BAR"
-        echo "-n", "blah"
+        cmd "echo -n blah"
         env_var "BAZ", "BUZZ"
       }
 

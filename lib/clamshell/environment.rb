@@ -45,6 +45,10 @@ module Clamshell
       @stmts << @shell.alias(name, quote(val) )
     end
 
+    def method_missing(*args)
+      @stmts << args.join(" ")
+    end
+
     def to_s
       @stmts.join("\n")
     end

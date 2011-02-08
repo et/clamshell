@@ -70,6 +70,21 @@ Currently, the shells supported are tcsh and bash. However, I am assuming that
 csh and zsh are supported as well since they are closely related to tcsh and
 bash, respectively. Hence, aliases are set up for their respective shells.
 
+### Generic shell statements
+
+You can also call generic shell statements that are valid in all shells:
+
+    echo -n "FOO"
+
+A `method_missing` method is defined which works as a catch-all. This means
+however, that your call must be ruby-esque, so the above statement must
+be written as:
+
+    echo "-n", "FOO"
+
+which will output
+
+    echo -n FOO
 
 ## Dependencies file
 

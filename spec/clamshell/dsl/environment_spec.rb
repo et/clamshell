@@ -100,18 +100,44 @@ describe Clamshell::Environment do
         end
       end
     end
+
+    describe "generic statement" do
+      it "should print out what it receives" do
+        @bash.send :echo, "blah"
+        @bash.inspect.should == %q{echo blah}
+      end
+    end
   end
 
   describe "to_s" do
-    block = proc {
-      env_var "FOO", "BAR"
-      env_var "BAZ", "BUZZ"
-    }
+    it "should convert a block" do
+      block = proc {
+        env_var "FOO", "BAR"
+        env_var "BAZ", "BUZZ"
+      }
 
-    out = <<-O.gsub(/^\s+/, "").chop
-    export FOO="BAR"
-    export BAZ="BUZZ"
-    O
-    Clamshell::Environment.setup("bash", &block).inspect.should == out
+      out = <<-O.gsub(/^\s+/, "").chop
+      export FOO="BAR"
+      export BAZ="BUZZ"
+      O
+
+      Clamshell::Environment.setup("bash", &block).inspect.should == out
+    end
+
+    it "should convert a block with generic statements" do
+      block = proc {
+        env_var "FOO", "BAR"
+        echo "-n", "blah"
+        env_var "BAZ", "BUZZ"
+      }
+
+      out = <<-O.gsub(/^\s+/, "").chop
+      setenv FOO "BAR"
+      echo -n blah
+      setenv BAZ "BUZZ"
+      O
+      Clamshell::Environment.setup("tcsh", &block).inspect.should == out
+    end
+
   end
 end

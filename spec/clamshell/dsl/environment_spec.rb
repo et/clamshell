@@ -40,13 +40,13 @@ describe Clamshell::Environment do
       @tcsh = Clamshell::Environment.new("tcsh")
     end
 
-    describe "alias" do
+    describe "env_alias" do
       it "should set a tcsh alias" do
-        @tcsh.alias("FOO", "BAR")
+        @tcsh.env_alias("FOO", "BAR")
         @tcsh.inspect.should == %q{alias FOO BAR}
       end
       it "should set a bash alias" do
-        @bash.alias("FOO", "BAR")
+        @bash.env_alias("FOO", "BAR")
         @bash.inspect.should == %q{alias FOO=BAR}
       end
     end

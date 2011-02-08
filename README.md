@@ -37,7 +37,7 @@ aliases). Setup a `Shell.env` file in your project root with the following:
       env_var "LC_CTYPE", "en_US"
       env_var "PATH", :prepend => "~/bin",    :delimiter => ":"
       env_var "PATH", :append  => "/usr/bin", :delimiter => ":"
-      alias editor "vim"
+      env_alias editor "vim"
     end
 
 You can convert these statements to bash statements as follows:

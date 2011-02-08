@@ -41,8 +41,8 @@ module Clamshell
       end
     end
 
-    def alias(name, val)
-      @stmts << @shell.alias(name, val)
+    def env_alias(name, val)
+      @stmts << @shell.env_alias(name, val)
     end
 
     def cmd(stmt)
@@ -64,7 +64,7 @@ module Clamshell
       "export #{name}=#{val}"
     end
 
-    def self.alias(name, val)
+    def self.env_alias(name, val)
       "alias #{name}=#{val}"
     end
   end
@@ -74,7 +74,7 @@ module Clamshell
       "setenv #{name} #{val}"
     end
 
-    def self.alias(name, val)
+    def self.env_alias(name, val)
       "alias #{name} #{val}"
     end
   end

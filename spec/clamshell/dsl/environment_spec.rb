@@ -43,11 +43,11 @@ describe Clamshell::Environment do
     describe "alias" do
       it "should set a tcsh alias" do
         @tcsh.alias("FOO", "BAR")
-        @tcsh.inspect.should == %q{alias FOO "BAR"}
+        @tcsh.inspect.should == %q{alias FOO BAR}
       end
       it "should set a bash alias" do
         @bash.alias("FOO", "BAR")
-        @bash.inspect.should == %q{alias FOO="BAR"}
+        @bash.inspect.should == %q{alias FOO=BAR}
       end
     end
 
@@ -56,36 +56,36 @@ describe Clamshell::Environment do
 
         it "should set up a bash environment variable" do
           @bash.env_var("FOO", "BAR")
-          @bash.inspect.should == %q{export FOO="BAR"}
+          @bash.inspect.should == "export FOO=BAR"
         end
 
         it "should set up a tcsh environment variable" do
           @tcsh.env_var("FOO", "BAR")
-          @tcsh.inspect.should == %q{setenv FOO "BAR"}
+          @tcsh.inspect.should == "setenv FOO BAR"
         end
       end
 
       describe "prepend" do
         it "should prepend to a bash environment variable" do
           @bash.env_var("FOO", :prepend => "BAR")
-          @bash.inspect.should == %q{export FOO="BAR${FOO}"}
+          @bash.inspect.should == "export FOO=BAR${FOO}"
         end
 
         it "should prepend to a tcsh environment variable" do
           @tcsh.env_var("FOO", :prepend => "BAR")
-          @tcsh.inspect.should == %q{setenv FOO "BAR${FOO}"}
+          @tcsh.inspect.should == "setenv FOO BAR${FOO}"
         end
       end
 
       describe "append" do
         it "should append to a bash environment variable" do
           @bash.env_var("FOO", :append => "BAR")
-          @bash.inspect.should == %q{export FOO="${FOO}BAR"}
+          @bash.inspect.should == %q{export FOO=${FOO}BAR}
         end
 
         it "should append to a tcsh environment variable" do
           @tcsh.env_var("FOO", :append => "BAR")
-          @tcsh.inspect.should == %q{setenv FOO "${FOO}BAR"}
+          @tcsh.inspect.should == %q{setenv FOO ${FOO}BAR}
         end
       end
 
@@ -96,7 +96,7 @@ describe Clamshell::Environment do
 
         it "should use a delimiter to append a variable" do
           @bash.env_var("FOO", :append => "BAR", :delimiter => ":")
-          @bash.inspect.should == %q{export FOO="${FOO}:BAR"}
+          @bash.inspect.should == %q{export FOO=${FOO}:BAR}
         end
       end
     end
@@ -117,8 +117,8 @@ describe Clamshell::Environment do
       }
 
       out = <<-O.gsub(/^\s+/, "").chop
-      export FOO="BAR"
-      export BAZ="BUZZ"
+      export FOO=BAR
+      export BAZ=BUZZ
       O
 
       Clamshell::Environment.setup("bash", &block).inspect.should == out
@@ -132,9 +132,9 @@ describe Clamshell::Environment do
       }
 
       out = <<-O.gsub(/^\s+/, "").chop
-      setenv FOO "BAR"
+      setenv FOO BAR
       echo -n blah
-      setenv BAZ "BUZZ"
+      setenv BAZ BUZZ
       O
       Clamshell::Environment.setup("tcsh", &block).inspect.should == out
     end

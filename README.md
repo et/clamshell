@@ -34,7 +34,7 @@ Sometimes your project has a dependency that is shell specific (environment vari
 aliases). Setup a `Shell.env` file in your project root with the following:
 
     Environment.setup ("bash") do
-      env_var "DISTCC_HOSTS" "localhost red green blue"
+      env_var "LC_CTYPE", "en_US"
       env_var "PATH", :prepend => "~/bin",    :delimiter => ":"
       env_var "PATH", :append  => "/usr/bin", :delimiter => ":"
       alias editor "vim"
@@ -46,10 +46,10 @@ You can convert these statements to bash statements as follows:
 
 which will print the following to standard out (or to a file using the `--shell-out=FILE` flag).
 
-    export DISTCC_HOSTS="localhost red green blue"
+    export LC_CTYPE=en_US
     export PATH=~/bin:$PATH
     export PATH=$PATH:/usr/bin
-    alias editor="vim"
+    alias editor=vim
 
 ### Shell independence
 

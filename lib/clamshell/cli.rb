@@ -35,7 +35,7 @@ module Clamshell
 
       file_out = Clamshell.settings[:shell_out]
       if file_out
-        File.open(file_out, "w") {|f| f.write(Dsl.build(file)) }
+        File.open(file_out, "w") {|f| f.write(Dsl.build(file) + "\n") }
       else
         Clamshell.ui.info Dsl.build(file)
       end

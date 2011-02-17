@@ -29,15 +29,6 @@ module Clamshell
         @stmts << @shell.env_var(name, args[0])
 
       else                            # appending or prepending to existing variable
-
-        # In csh, concatting to an undefined environment variable
-        # results in an error. This is a safe guard that sets the
-        # environment variable to an empty string before appending/prepending.
-        unless ENV[name]
-          ENV[name] = ""
-          @stmts << @shell.env_var(name, ENV[name])
-        end
-
         delimiter = args[0][:delimiter] || ""
         if args[0][:prepend]
           val = args[0][:prepend] + delimiter + "${#{name}}"

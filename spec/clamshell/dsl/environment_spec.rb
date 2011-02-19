@@ -107,6 +107,18 @@ describe Clamshell::Environment do
         @bash.inspect.should == %q{echo blah}
       end
     end
+
+    describe "include_file" do
+      it "should include a file" do
+        input = <<-I.gsub(/^\s+/, "").chop
+        env_var "FOO", "BAR"
+        cmd "echo blah"
+        I
+        File.stub!(:read).with("included_file.txt").and_return(input)
+        @bash.include_file("included_file.txt")
+        @bash.inspect.should == %Q{export FOO=BAR\necho blah}
+      end
+    end
   end
 
   describe "to_s" do
@@ -149,6 +161,5 @@ describe Clamshell::Environment do
       }
       Clamshell::Environment.setup("tcsh", &block).inspect.should == "unlimited coredumpsize"
     end
-
   end
 end

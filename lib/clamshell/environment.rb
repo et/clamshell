@@ -49,6 +49,10 @@ module Clamshell
       @stmts << stmt
     end
 
+    def include_file(file)
+      instance_eval File.read(file), file
+    end
+
     def to_s
       @stmts.join("\n")
     end

@@ -144,6 +144,20 @@ is available:
       end
     end
 
+If you want to split your environment files up, the `include_file` command
+is as your disposal.
+
+    Environment.setup do
+      env_var "FOO", "BAR"
+      include_file "/path/to/another.file"
+    end
+
+`another.file`'s contents:
+
+    env_alias "editor", "vim"
+    cmd "echo FOOBAR"
+
+
 ## Todo
 
 * More git options -- reference more than SHA_ids (branch, tag, etc.)

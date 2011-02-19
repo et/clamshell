@@ -4,7 +4,7 @@ module Clamshell
     attr_reader :shell
 
     def self.setup(shell = nil, &block)
-      shell ||= Clamshell.settings[:shell]
+      $SHELL = shell ||= Clamshell.settings[:shell]
       raise "No shell specified" unless shell
 
       e = new(shell)

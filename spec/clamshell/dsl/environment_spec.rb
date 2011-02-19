@@ -139,5 +139,16 @@ describe Clamshell::Environment do
       Clamshell::Environment.setup("tcsh", &block).inspect.should == out
     end
 
+    it "should provide a $SHELL global variable" do
+      block = proc {
+        if $SHELL == "tcsh"
+          cmd "unlimited coredumpsize"
+        elsif $SHELL == "bash"
+          cmd "ulimit -c unlimited"
+        end
+      }
+      Clamshell::Environment.setup("tcsh", &block).inspect.should == "unlimited coredumpsize"
+    end
+
   end
 end

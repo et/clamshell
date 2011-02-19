@@ -130,6 +130,20 @@ that contains the following:
 and call it with `source Project.clamshell`. This will source the correct shell
 statements then check the dependencies.
 
+### Environment
+
+If you need to setup the environment and produce a shell command that is
+different depending on the shell being used, the global variable `$SHELL`
+is available:
+
+    Environment.setup do
+      if $SHELL == "tcsh"
+        cmd "unlimit coredumpsize"
+      elsif $SHELL == "bash"
+        cmd "ulimit -c unlimited"
+      end
+    end
+
 ## Todo
 
 * More git options -- reference more than SHA_ids (branch, tag, etc.)

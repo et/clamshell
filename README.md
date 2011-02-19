@@ -6,8 +6,7 @@ a cross-shell compatible environment.
 ## Requirements
 
 * [ruby](http://www.ruby-lang.org/en/downloads/) 1.9.2
-* [bundler](http://gembundler.com/)
-* [git](http://git-scm.com/download) > 1.7.2
+* [bundler](http://gembundler.com/) ~> 1.0
 
 ## Installing
 

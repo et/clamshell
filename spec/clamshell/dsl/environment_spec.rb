@@ -65,27 +65,55 @@ describe Clamshell::Environment do
         end
       end
 
-      describe "prepend" do
-        it "should prepend to a bash environment variable" do
-          @bash.env_var("FOO", :prepend => "BAR")
-          @bash.inspect.should == "export FOO=BAR${FOO}"
+      describe "concat" do
+
+        before :all do
+          ENV['FOO'] = 'FOO'
         end
 
-        it "should prepend to a tcsh environment variable" do
-          @tcsh.env_var("FOO", :prepend => "BAR")
-          @tcsh.inspect.should == "setenv FOO BAR${FOO}"
-        end
-      end
-
-      describe "append" do
-        it "should append to a bash environment variable" do
-          @bash.env_var("FOO", :append => "BAR")
-          @bash.inspect.should == %q{export FOO=${FOO}BAR}
+        after :all do
+          ENV['FOO'] = nil
         end
 
-        it "should append to a tcsh environment variable" do
-          @tcsh.env_var("FOO", :append => "BAR")
-          @tcsh.inspect.should == %q{setenv FOO ${FOO}BAR}
+        describe "prepend" do
+          it "should prepend to a bash environment variable" do
+            @bash.env_var("FOO", :prepend => "BAR")
+            @bash.inspect.should == "export FOO=BAR${FOO}"
+          end
+
+          it "should prepend to a tcsh environment variable" do
+            @tcsh.env_var("FOO", :prepend => "BAR")
+            @tcsh.inspect.should == "setenv FOO BAR${FOO}"
+          end
+        end
+
+        describe "append" do
+          it "should append to a bash environment variable" do
+            @bash.env_var("FOO", :append => "BAR")
+            @bash.inspect.should == %q{export FOO=${FOO}BAR}
+          end
+
+          it "should append to a tcsh environment variable" do
+            @tcsh.env_var("FOO", :append => "BAR")
+            @tcsh.inspect.should == %q{setenv FOO ${FOO}BAR}
+          end
+        end
+
+        context "safe concat" do
+          before :each do
+            ENV['UNDEFINED'] = nil
+          end
+
+          it "should set the environment variable to empty string if not set" do
+            @tcsh.env_var("UNDEFINED", :append => "FOO")
+            @tcsh.inspect.should == %Q{setenv UNDEFINED \nsetenv UNDEFINED ${UNDEFINED}FOO}
+          end
+
+          it "should not try to keep setting the environment variable" do
+            @tcsh.env_var("UNDEFINED", :append => "FOO")
+            @tcsh.env_var("UNDEFINED", :append => "BAR")
+            @tcsh.inspect.should == %Q{setenv UNDEFINED \nsetenv UNDEFINED ${UNDEFINED}FOO\nsetenv UNDEFINED ${UNDEFINED}BAR}
+          end
         end
       end
 
@@ -99,6 +127,7 @@ describe Clamshell::Environment do
           @bash.inspect.should == %q{export FOO=${FOO}:BAR}
         end
       end
+
     end
 
     describe "generic statement" do

@@ -129,7 +129,7 @@ that contains the following:
 and call it with `source Project.clamshell`. This will source the correct shell
 statements then check the dependencies.
 
-### Environment
+### Unique shell statements
 
 If you need to setup the environment and produce a shell command that is
 different depending on the shell being used, the global variable `$SHELL`
@@ -143,26 +143,38 @@ is available:
       end
     end
 
+### Splitting the environment
+
 If you want to split your environment files up, the `include_file` command
 is as your disposal.
 
     Environment.setup do
-      env_var "FOO", "BAR"
       include_file "/path/to/another.file"
     end
 
 `another.file`'s contents:
 
-    env_alias "editor", "vim"
+    env_var "CLASSPATH", :append => "~/java"
     cmd "echo FOOBAR"
+
+If you definitely need to split your environment up, take this approach.
+Another approach you might have considered is to create multiple generated
+files and source each one.
+
+DON'T!
+
+In tcsh, appending to an environment variable that doesn't exist throws an
+error. There is an internal mechanism in clamsehll that detects if an
+environment variable doesn't exist. If it doesn't it creates one and sets
+it to an empty string before appending.
+
+So the previous example would generate the following statements in tcsh:
+
+    setenv CLASSPATH ""
+    setenv CLASSPATH ${CLASSPATH}:~/java
+    echo FOOBAR
 
 
 ## Todo
-
-* More git options -- reference more than SHA_ids (branch, tag, etc.)
-* Setting an environment variable should set some kind of internal environment variable as well.
-* If the output it to be sourced then use echo statements
-* Check if apps exist in user's PATH.
-* Throw error status code if a dependency is not fulfilled.
-* shell_out flag implementation.
 * Make clamopts file.
+* Split this project.

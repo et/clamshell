@@ -106,13 +106,13 @@ describe Clamshell::Environment do
 
           it "should set the environment variable to empty string if not set" do
             @tcsh.env_var("UNDEFINED", :append => "FOO")
-            @tcsh.inspect.should == %Q{setenv UNDEFINED \nsetenv UNDEFINED ${UNDEFINED}FOO}
+            @tcsh.inspect.should == %Q{setenv UNDEFINED ""\nsetenv UNDEFINED ${UNDEFINED}FOO}
           end
 
           it "should not try to keep setting the environment variable" do
             @tcsh.env_var("UNDEFINED", :append => "FOO")
             @tcsh.env_var("UNDEFINED", :append => "BAR")
-            @tcsh.inspect.should == %Q{setenv UNDEFINED \nsetenv UNDEFINED ${UNDEFINED}FOO\nsetenv UNDEFINED ${UNDEFINED}BAR}
+            @tcsh.inspect.should == %Q{setenv UNDEFINED ""\nsetenv UNDEFINED ${UNDEFINED}FOO\nsetenv UNDEFINED ${UNDEFINED}BAR}
           end
         end
       end

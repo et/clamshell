@@ -34,7 +34,7 @@ module Clamshell
         # results in an error. This is a safe guard that sets the
         # environment variable to an empty string before appending/prepending.
         unless ENV[name]
-          ENV[name] = ""
+          ENV[name] = %q{""}
           @stmts << @shell.env_var(name, ENV[name])
         end
 

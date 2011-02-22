@@ -112,5 +112,9 @@ describe Clamshell::Git do
     it "should raise an error for a bad tag" do
       expect { Clamshell::Git.new(REPO_DIR, :tag => "Bad")}.to raise_error(Clamshell::GitError, /does not have a tag named/)
     end
+
+    it "should raise an error for an unfound git repository" do
+        expect { Clamshell::Git.new("/tmp/unfound_git_repo")}.to raise_error(Clamshell::GitError, /Git repository at \/tmp\/unfound_git_repo could not be queried/)
+    end
   end
 end

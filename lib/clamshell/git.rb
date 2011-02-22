@@ -10,7 +10,11 @@ module Clamshell
       @ignored = opts[:ignored]
       return if @ignored
 
-      @repo   = Grit::Repo.new(@uri)
+      begin
+        @repo   = Grit::Repo.new(@uri)
+      rescue
+          raise_error "Git repository at #{@uri} could not be queried."
+      end
       @branch = opts[:branch] || "master"
 
       unless @repo.heads.any? {|h| h.name == @branch }

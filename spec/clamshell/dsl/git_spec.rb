@@ -114,7 +114,7 @@ describe Clamshell::Git do
     end
 
     it "should raise an error for an unfound git repository" do
-        expect { Clamshell::Git.new("/tmp/unfound_git_repo")}.to raise_error(Clamshell::GitError, /Git repository at \/tmp\/unfound_git_repo could not be queried/)
+        expect { Clamshell::Git.new("/tmp/unfound_git_repo")}.to raise_error(Clamshell::GitError, /unfound_git_repo could not be queried/)
     end
   end
 end

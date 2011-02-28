@@ -174,6 +174,13 @@ So the previous example would generate the following statements in tcsh:
     setenv CLASSPATH ${CLASSPATH}:~/java
     echo FOOBAR
 
+### Conversion on the fly
+
+If you need to convert a generic statement without using a file, you can
+use the `convert_string` action, but you must specify a shell.
+
+    clamshell convert_string "env_var 'FOO' 'BAR'" --shell=tcsh
+    => setenv FOO BAR\n
 
 ## Todo
 * Make clamopts file.

@@ -41,6 +41,17 @@ module Clamshell
       end
     end
 
+    desc "convert STRING", "Converts a string on the fly."
+    method_option :shell, :type => :string, :banner => "Shell to create statements for", :required => true
+    def convert_string(string)
+      input = <<-I
+        Environment.setup do
+          #{string}
+        end
+      I
+      Clamshell.ui.info instance_eval(input).inspect
+    end
+
     private
       def check_file(file)
         abort("File: #{file}, not found.") unless File.exist?(file)

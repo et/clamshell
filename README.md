@@ -1,12 +1,17 @@
 # Clamshell
 
-Clamshell is a tool that validates your project's dependencies in
-a cross-shell compatible environment.
+Clamshell is a tool that converts generic shell statements into shell specific
+statements that can be sourced to set up an environment.
+
+## Motivation
+
+While working on a legacy project that used tcsh as its primary shell, I wanted
+to use bash, but realized that some of the old schoolers actually liked tcsh.
+This was the compromise.
 
 ## Requirements
 
 * [ruby](http://www.ruby-lang.org/en/downloads/) 1.9.2
-* [bundler](http://gembundler.com/) ~> 1.0
 
 ## Installing
 
@@ -14,20 +19,7 @@ Clone the repository
 
     git clone git://github.com/et/clamshell.git
 
-Install the required gems using `bundler`.
-
-    bundle install
-
-## Clamshell files
-
-Clamshell takes two types of files:
-
-* An environment file that contains a list of shell specific statements that should be `source`d for your project.
-* A dependencies file that contains a list of dependencies required for your project.
-
-Both of these files may have ruby code embedded in them.
-
-##  Environment file
+##  Setting up an environment file
 
 Sometimes your project has a dependency that is shell specific (environment variables,
 aliases). Setup a `Shell.env` file in your project root with the following:
@@ -79,56 +71,6 @@ But you must be verbose that you are doing so:
 
     cmd "echo -n FOO"
 
-## Dependencies file
-
-In your project root directory, set up a file called `Dependencies.list`:
-
-    Dependencies.validate do
-      git "/path/to/git/repoA", :rev => "12345SHAID"
-    end
-
-In plain English, this says: "This project has one dependency to a git
-repository located at `/path/to/git/repo` whose `HEAD` must be pointing to `12345SHAID`".
-This assumes that the directory contains a `.git` directory.
-
-Valid options include `:rev => SHA_ID` and `:tag => TAG`.
-The `master` branch is implied to be the `HEAD`, but you can use the `:branch => BRANCH`
-option to specify otherwise.
-
-Additionally, you can use a `:ignored => true` option to skip validation for this dependency.
-
-You can check a dependencies file:
-
-    clamshell check Dependencies.list
-
-which will validate whether or not the listed dependencies are up to date.
-
-Refer to the spec's fixtures for an [example](https://github.com/et/clamshell/blob/master/spec/fixtures/Dependencies.list).
-
-
-## Global options
-
-* `--no-color`       - Disables color
-* `--disable`        - Disables clamshell from running (useful if you use clamshell in some kind of continuous integration)
-* `--verbose`        - Prints debugging information.
-
-## Best practices
-
-To use clamshell effectively, it's best to first convert your environment file
-to your all the required shells using it.
-
-    clamshell convert Shell.env --shell-out=Shell.bash
-    clamshell convert Shell.env --shell-out=Shell.tcsh
-
-Then set up a file called `Project.clamshell` in your project root directory
-that contains the following:
-
-    source Shell.`ps -p $$ | awk 'NR==2 {print $4}'`
-    clamshell check Dependencies.list
-
-and call it with `source Project.clamshell`. This will source the correct shell
-statements then check the dependencies.
-
 ### Unique shell statements
 
 If you need to setup the environment and produce a shell command that is
@@ -158,21 +100,28 @@ is as your disposal.
     cmd "echo FOOBAR"
 
 If you definitely need to split your environment up, take this approach.
-Another approach you might have considered is to create multiple generated
+
+#### Pitfall
+
+Another approach you might have considered is to generate multiple
 files and source each one.
 
-DON'T!
+__DON'T!__
 
 In tcsh, appending to an environment variable that doesn't exist throws an
-error. There is an internal mechanism in clamsehll that detects if an
+error. There is an internal mechanism in clamshell that detects if an
 environment variable doesn't exist. If it doesn't it creates one and sets
 it to an empty string before appending.
 
-So the previous example would generate the following statements in tcsh:
+So the previous example would generate the following statements:
 
     setenv CLASSPATH ""
     setenv CLASSPATH ${CLASSPATH}:~/java
     echo FOOBAR
+
+This can cause some headaches if more than one file is generated.
+
+*Rule of thumb: generate one file, source one file.*
 
 ### Conversion on the fly
 
@@ -183,5 +132,5 @@ use the `convert_string` action, but you must specify a shell.
     => setenv FOO BAR\n
 
 ## Todo
-* Make clamopts file.
-* Split this project.
+
+* Package as gem.

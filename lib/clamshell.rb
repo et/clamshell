@@ -4,23 +4,13 @@ $:.unshift(File.dirname(__FILE__)) unless
 module Clamshell
 
   autoload :Dsl,         'clamshell/dsl'
-  autoload :UI,          'clamshell/ui'
-  autoload :SilentUI,    'clamshell/ui'
-
-  autoload :Environment,  'clamshell/environment'
-  autoload :Dependencies, 'clamshell/dependencies'
-  autoload :Git,          'clamshell/git'
+  autoload :Environment, 'clamshell/environment'
 
   class SafeExit < StandardError; end
   class DslError < StandardError; end
-  class GitError < StandardError; end
 
   class << self
-    attr_writer :ui, :settings
-
-    def ui
-      @ui ||= SilentUI.new
-    end
+    attr_writer :settings
 
     def settings
       @settings ||= {}

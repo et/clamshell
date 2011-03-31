@@ -17,43 +17,6 @@ describe Clamshell::CLI do
     it "shows the help listing with no args" do
       capture(:stdout){ subject.start }.should =~ /Tasks:/
     end
-
-    context "options" do
-      describe "color" do
-        it "should by default give a color ui" do
-          capture(:stdout) { subject.start }
-          Clamshell.ui.instance_variable_get(:@shell).should be_an_instance_of Thor::Shell::Color
-        end
-
-        it "should give a basic ui for --no_color" do
-          capture(:stdout) { subject.start(["--no-color"]) }
-          Clamshell.ui.instance_variable_get(:@shell).should be_a Thor::Shell::Basic
-        end
-      end
-
-      it "#--verbose, should turn on debug statements" do
-        capture(:stdout) { subject.start ["--verbose"] }
-        Clamshell.ui.instance_variable_get(:@debug).should be_true
-      end
-
-      it "#--disable, raises a safe system exit error" do
-        expect {
-          capture(:stdout){ subject.start ["--disable"] }
-        }.to raise_error SystemExit
-      end
-    end
-  end
-
-  describe "#check" do
-    it "shows an error for a file not found" do
-      test_missing_file(["check", "missing_file"])
-    end
-
-    it "should attempt to check a dependencies file" do
-      expect {
-        capture(:stdout){ subject.start ["check", "#{FIXTURES_DIR}/Dependencies.list"]}
-      }.to_not raise_error
-    end
   end
 
   describe "#convert" do

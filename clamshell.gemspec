@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "clamshell"
 
-  s.add_dependency('grit')
+  s.add_dependency('thor')
 
   s.add_development_dependency('rspec')
 

@@ -9,15 +9,9 @@ While working on a legacy project that used tcsh as its primary shell, I wanted
 to use bash, but realized that some of the old schoolers actually liked tcsh.
 This was the compromise.
 
-## Requirements
+## Installation
 
-* [ruby](http://www.ruby-lang.org/en/downloads/) 1.9.2
-
-## Installing
-
-Clone the repository
-
-    git clone git://github.com/et/clamshell.git
+    gem install clamshell
 
 ##  Setting up an environment file
 
@@ -130,7 +124,3 @@ use the `convert_string` action, but you must specify a shell.
 
     clamshell convert_string "env_var 'FOO' 'BAR'" --shell=tcsh
     => setenv FOO BAR\n
-
-## Todo
-
-* Package as gem.

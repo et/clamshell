@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Eric Thomas"]
   s.email       = ["eric.l.m.thomas@gmail.com"]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/et/clamshell"
   s.summary     = %q{Clamshell manages your environment in a shell-independent setup.}
   s.description = %q{Clamshell allows you to setup shell statements which configure
                      your project's environment that doesn't care about which shell
